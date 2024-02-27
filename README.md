@@ -2,8 +2,7 @@
 
 A continuación, se describen las actividades desarrolladas:
 
-|**TALLERES**|
-| :-:| 
+### **TALLERES**
 
 |Carpeta| Aspecto relevante |
 | :-: |:-: |
@@ -12,8 +11,7 @@ A continuación, se describen las actividades desarrolladas:
 | | |
 
 
-|**PROYECTOS**|
-| :-:| 
+### **PROYECTOS**
 
 |Carpeta| Aspecto relevante |
 | :-: |:-: |
