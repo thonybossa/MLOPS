@@ -7,7 +7,7 @@ services:
       - "8888:8888"
       - "6006:6006"
     volumes:
-      - ${PWD}:/tfx/src
+      - .:/tfx/src
     entrypoint: /run_jupyter.sh
     stdin_open: true
     tty: true
