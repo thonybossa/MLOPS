@@ -18,7 +18,11 @@ A continuación encontrará las instrucciones relacionadas con la solución del 
 
     `cd MLOPS/Proyecto_1`
 
-3. Ejecute desde la terminal el comando
+3. Construya la carpeta con los datos a usar:
+
+    `dvc pull`
+
+4. Ejecute desde la terminal el comando
     ```bash
     docker-compose up
     ```
@@ -31,8 +35,4 @@ A continuación encontrará las instrucciones relacionadas con la solución del 
         ```
     * Dirigirse a un buscador y seguir la dirección `localhost:8888` en la que se desplegará una web de jupyter en donde deberá colocar el token que aprece en el link mencionado anteriormente.
 
-4. Una vez ubicado en la interfaz de jupyter lab, deberá disponer los datos usados en para cada notebook:
-    * Selección de Características: `dvc pull data/covertype/covertype_train.csv`
-    * Pipeline de Datos: `dvc pull data/covertype/covertype_train.csv`
-
-5. Ejecute cualquiera de los dos noteboks disponibles.
+5. Ejecute cualquiera de los dos noteboks disponibles, en este caso la selección de características y el pipeline de datos están en dos notebooks diferentes.
