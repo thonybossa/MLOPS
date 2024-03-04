@@ -1,11 +1,15 @@
 feature {
   name: "Cover_Type"
   type: INT
-  int_domain {
+  string_domain {
     name: "Cover_Type"
-    min: 0
-    max: 6
-    is_categorical: true
+    value: "0"
+    value: "1"
+    value: "2"
+    value: "3"
+    value: "4"
+    value: "5"
+    value: "6"
   }
   presence {
     min_fraction: 1.0

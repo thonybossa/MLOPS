@@ -1,17 +1,10 @@
 feature {
   name: "Cover_Type"
   type: INT
-  int_domain {
-    name: "Cover_Type"
-    min: 0
-    max: 6
-    is_categorical: true
-  }
   presence {
     min_fraction: 1.0
     min_count: 1
   }
-  not_in_environment: "SERVING"
   shape {
     dim {
       size: 1
@@ -34,11 +27,6 @@ feature {
 feature {
   name: "Hillshade_9am"
   type: INT
-  int_domain {
-    name: "Hillshade_9am"
-    min: 0
-    max: 255
-  }
   presence {
     min_fraction: 1.0
     min_count: 1
@@ -52,11 +40,6 @@ feature {
 feature {
   name: "Hillshade_Noon"
   type: INT
-  int_domain {
-    name: "Hillshade_Noon"
-    min: 0
-    max: 255
-  }
   presence {
     min_fraction: 1.0
     min_count: 1
@@ -109,11 +92,6 @@ feature {
 feature {
   name: "Slope"
   type: INT
-  int_domain {
-    name: "Slope"
-    min: 0
-    max: 90
-  }
   presence {
     min_fraction: 1.0
     min_count: 1
@@ -215,5 +193,3 @@ string_domain {
   value: "Neota"
   value: "Rawah"
 }
-default_environment: "TRAINING"
-default_environment: "SERVING"
