@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-Proyecto_1/data/sql/
+Proyecto_1/data/
 # C extensions
 *.so
 
