@@ -4,12 +4,12 @@ import pandas as pd
 from google.protobuf.json_format import MessageToDict
 
 def get_records(dataset, num_records):
-    '''Extracts records from the given dataset.
-    Args:
-        dataset (TFRecordDataset): dataset saved by ExampleGen
-        num_records (int): number of records to preview
-    '''
     
+    '''Extrae registros del conjunto de datos dado.
+    Args:
+        dataset (TFRecordDataset): conjunto de datos guardado por ExampleGen
+        num_records (int): número de registros para previsualizar
+    '''    
     # initialize an empty list
     records = []
     
@@ -34,7 +34,7 @@ def get_records(dataset, num_records):
     return records
 
 def display_types(types):
-    # Helper function to render dataframes for the artifact and execution types
+    # Función auxiliar para renderizar DataFrames para los tipos de artefactos y ejecuciones
     table = {'id': [], 'name': []}
     for a_type in types:
         table['id'].append(a_type.id)
@@ -42,7 +42,7 @@ def display_types(types):
     return pd.DataFrame(data=table)
 
 def display_artifacts(store, artifacts, base_dir):
-    # Helper function to render dataframes for the input artifacts
+    # Función auxiliar para renderizar DataFrames para los artefactos de entrada
     table = {'artifact id': [], 'type': [], 'uri': []}
     for a in artifacts:
         table['artifact id'].append(a.id)
@@ -52,7 +52,7 @@ def display_artifacts(store, artifacts, base_dir):
     return pd.DataFrame(data=table)
 
 def display_properties(store, node):
-    # Helper function to render dataframes for artifact and execution properties
+    # Función auxiliar para renderizar DataFrames para las propiedades de artefactos y ejecuciones
     table = {'property': [], 'value': []}
     
     for k, v in node.properties.items():
