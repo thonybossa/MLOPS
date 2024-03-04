@@ -4,7 +4,7 @@ Desarrollado por **Grupo 3**.
 
 Integrantes:
 * Anthony Amaury Bossa
-* José Luis Vega
+* José Luis Vega (No participó en esta solución)
 * Víctor Andrés De La Hoz
 
 ## Desarrollo:
