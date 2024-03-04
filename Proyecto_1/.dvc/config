@@ -1,2 +1,6 @@
 [core]
     no_scm = True
+    remote = drive
+['remote "drive"']
+    url = gdrive://1XwrFPRy1DiT7pwJugU7woOI5Q0zFSMyY
+    gdrive_acknowledge_abuse = true
