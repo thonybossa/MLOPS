@@ -18,11 +18,17 @@ A continuación encontrará las instrucciones relacionadas con la solución del 
 
     `cd MLOPS/Proyecto_1`
 
-3. Construya la carpeta con los datos a usar:
+3. Instale las dependencias necesarias para obtener los datos del proyecto usando el comando:
+
+    `pip install -r requirements.txt`
+
+4. Descargue los datos del proyecto usando el comando:
 
     `dvc pull`
 
-4. Ejecute desde la terminal el comando
+    *Nota: En este caso los datos están almacenados en una carpeta de google drive, por lo que se abrirá automáticamente una ventana de autenticación de google drive. Ingrese con su cuenta de google y permita los accesos según sus preferencias.*
+
+5. Ejecute desde la terminal el comando
     ```bash
     docker-compose up
     ```
@@ -33,6 +39,6 @@ A continuación encontrará las instrucciones relacionadas con la solución del 
         ```zsh
         http://127.0.0.1:8888/lab?token=<TOKEN>
         ```
-    * Dirigirse a un buscador y seguir la dirección `localhost:8888` en la que se desplegará una web de jupyter en donde deberá colocar el token que aprece en el link mencionado anteriormente.
+    * Dirigirse a un buscador y escriba la dirección `localhost:8888` en la que se desplegará una web de jupyter en donde deberá colocar el token que aprece en el link mencionado anteriormente.
 
-5. Ejecute cualquiera de los dos noteboks disponibles, en este caso la selección de características y el pipeline de datos están en dos notebooks diferentes.
+6. Ejecute cualquiera de los dos noteboks disponibles, en este caso la selección de características y el pipeline de datos están en dos notebooks diferentes. Tenga en cuenta que gracias a `dvc`, todos los archivos, existen en el directorio `data` y no es necesario descargarlos y/o generarlos de nuevo.
