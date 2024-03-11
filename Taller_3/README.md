@@ -24,5 +24,6 @@ A continuación encontrará las instrucciones relacionadas con la solución del 
     ```
      Automáticamente docker:
     * Revisará si las imagenes necesarias para la ejecución de Airflow existen en local, de lo contrario las traerá y las construirá.
-    * Una vez construidas las imagenes, procederá con el levantado del contenedor en el puerto indicado. En este caso es el puerto 8080.
+    * Instalará las dependencias que se deben usar.
+    * Una vez construidas las imagenes e instaladas las dependencias, procederá con el levantado del contenedor en el puerto indicado. En este caso es el puerto 8080.
     * Dirigirse a un buscador y escriba la dirección `localhost:8080` en la que se desplegará una web de Airflow en donde deberá colocar el usuario y contraseña: `airflow` y `airflow` respectivamente.
