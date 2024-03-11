@@ -10,7 +10,7 @@ import pickle
 
 
 @dag(start_date=datetime(2024, 3, 9), schedule_interval='@daily', catchup=False)
-def load_penguin_data():
+def pipeline():
 
     @task
     def load_data():
@@ -61,4 +61,4 @@ def load_penguin_data():
                
     load_data() >> clean_db() >> train()
 
-dag_instance = load_penguin_data()
+dag_instance = pipeline()
