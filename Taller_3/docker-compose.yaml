@@ -289,10 +289,5 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-  #requirements:
-    #build: 
-      #context: .
-      #dockerfile: Dockerfile
-
 volumes:
   postgres-db-volume:
