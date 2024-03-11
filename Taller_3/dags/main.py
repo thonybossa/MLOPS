@@ -4,6 +4,9 @@ from datetime import datetime, timedelta
 import pandas as pd
 from sqlalchemy import create_engine
 from airflow.decorators import dag , task 
+from sklearn.model_selection import train_test_split
+from catboost import CatBoostClassifier
+import pickle
 
 
 @dag(start_date=datetime(2024, 3, 9), schedule_interval='@daily', catchup=False)
@@ -27,7 +30,35 @@ def load_penguin_data():
             connection.execute('ALTER TABLE public.penguin_data DROP COLUMN  "Date Egg";') 
             connection.execute('ALTER TABLE public.penguin_data DROP COLUMN  "Delta 15 N (o/oo)";') 
             connection.execute('ALTER TABLE public.penguin_data DROP COLUMN  "Delta 13 C (o/oo)";') 
+            connection.execute('ALTER TABLE public.penguin_data DROP COLUMN  "Comments";')
+    @task
+    def train():
+        engine = create_engine('postgresql+psycopg2://airflow:airflow@postgres/airflow')
+
+        df_final = pd.read_sql_table('penguin_data', con=engine)
+        df_final = df_final.dropna()
+
+        # Dividir los datos en características (X) y variable objetivo (y)
+        X = df_final.drop('Species', axis=1)
+        y = df_final['Species']
+
+        # Obtener los índices de las columnas categóricas
+        cat_features_indices = [i for i, col in enumerate(X.columns) if X[col].dtype == 'object' or X[col].dtype.name == 'category']
+
+        # Realizar la partición de los datos en conjuntos de entrenamiento y prueba
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        # Crear una instancia del modelo CatBoostClassifier
+        model = CatBoostClassifier(cat_features=cat_features_indices)
+
+        # Entrenar el modelo
+        model.fit(X_train, y_train)
+
+        #GUARDAMOS EL MODELO
+        with open('model_catboost.pkl', 'wb') as f:
+
+            pickle.dump(model, f)
                
-    load_data() >> clean_db() 
+    load_data() >> clean_db() >> train()
 
 dag_instance = load_penguin_data()
