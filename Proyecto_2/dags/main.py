@@ -43,19 +43,23 @@ def pipeline():
         X = df_final.drop('Species', axis=1)
         y = df_final['Species']
 
+        # Obtener los índices de las columnas categóricas
+        cat_features_indices = [i for i, col in enumerate(X.columns) if X[col].dtype == 'object' or X[col].dtype.name == 'category']
+
         # Realizar la partición de los datos en conjuntos de entrenamiento y prueba
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         # Crear una instancia del modelo CatBoostClassifier
-        model = CatBoostClassifier()
+        model = CatBoostClassifier(cat_features=cat_features_indices)
 
         # Entrenar el modelo
         model.fit(X_train, y_train)
 
-        # Guardar el modelo
+        #GUARDAMOS EL MODELO
         with open('model_catboost.pkl', 'wb') as f:
-            pickle.dump(model, f)
 
+            pickle.dump(model, f)
+               
     load_data() >> clean_db() >> train()
 
 dag_instance = pipeline()
