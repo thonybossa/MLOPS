@@ -83,6 +83,16 @@ x-airflow-common:
     mysql:
       condition: service_healthy
 services:
+
+  jupyter:
+    image: jupyter/base-notebook:latest
+    environment:
+      - JUPYTER_TOKEN=token
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    ports:
+      - "8087:8087"
+
   minio:
     container_name: Minio
     command: server /data --console-address ":8088"
