@@ -91,7 +91,7 @@ services:
     volumes:
       - ./notebooks:/home/jovyan/work
     ports:
-      - "8087:8087"
+      - "8090:8888"
 
   minio:
     container_name: Minio
@@ -123,14 +123,14 @@ services:
       retries: 3
     restart: always
     ports:
-      - "3306:3306"
+      - "8082:8082"
   admin:
     image: phpmyadmin/phpmyadmin
     restart: always
     depends_on:
       - mysql
     ports:
-      - 5050:80
+      - 8081:80
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: root
