@@ -82,7 +82,7 @@ x-airflow-common:
       condition: service_healthy
     mysql:
       condition: service_healthy
-
+services:
   minio:
     container_name: Minio
     command: server /data --console-address ":8088"
