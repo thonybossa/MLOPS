@@ -83,7 +83,20 @@ x-airflow-common:
     mysql:
       condition: service_healthy
 
-services:
+  minio:
+    container_name: Minio
+    command: server /data --console-address ":8088"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    image: quay.io/minio/minio:latest
+    ports:
+      - '8088:8088'
+      - '8089:8089'
+    volumes:
+      - ./minio:/data
+    restart: unless-stopped
+
   mysql:
     image: mysql:latest
     environment:
@@ -295,3 +308,4 @@ services:
 
 volumes:
   mysql-data-volume:
+  minio-data:
