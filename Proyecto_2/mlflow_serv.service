@@ -13,7 +13,7 @@ Environment=AWS_SECRET_ACCESS_KEY=minioadmin
 ExecStart= python3 -m mlflow server \
 --backend-store-uri sqlite:////home/estudiante/MLOPS/Proyecto_2/mlflow/mlflow.db \
 --default-artifact-root s3://mlflows3/artifacts \
---host 0.0.0.0 \
+--host 0.0.0.0:8082 \
 --serve-artifacts
 
 [Install]
