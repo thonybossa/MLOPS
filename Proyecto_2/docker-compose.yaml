@@ -90,6 +90,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
+    restart: unless-stopped
 
   jupyter:
     image: jupyter/base-notebook:latest
@@ -99,6 +100,7 @@ services:
       - ./notebooks:/home/jovyan/
     ports:
       - "8086:8888"
+    restart: unless-stopped
 
   minio:
     container_name: Minio
