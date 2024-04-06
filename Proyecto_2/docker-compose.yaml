@@ -93,11 +93,13 @@ services:
     restart: unless-stopped
 
   jupyter:
-    image: jupyter/base-notebook:latest
+    build: 
+      context: .
+      dockerfile: Dockerfile
     environment:
       - JUPYTER_TOKEN=token
     volumes:
-      - ./notebooks:/home/jovyan/notebooks
+      - ./notebooks:/home/jovyan/work
     ports:
       - "8086:8888"
     restart: unless-stopped
