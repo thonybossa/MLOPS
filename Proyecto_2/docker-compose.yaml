@@ -92,18 +92,6 @@ services:
       - "8083:8083"
     restart: unless-stopped
 
-  jupyter:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      - JUPYTER_TOKEN=token
-    volumes:
-      - ./notebooks:/home/jovyan/work
-    ports:
-      - "8086:8888"
-    restart: unless-stopped
-
   minio:
     container_name: Minio
     command: server /data --console-address ":8089"

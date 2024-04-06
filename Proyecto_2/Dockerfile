@@ -15,11 +15,8 @@ COPY . .
 # Instalar dependencias
 RUN pip install -r requirements.txt
 
-# Instalar Jupyter
-RUN pip install jupyter
+# Exponer puerto para MLflow
+EXPOSE 8083
 
-# Exponer puertos para MLflow y Jupyter
-EXPOSE 8083 8888
-
-# Comando para iniciar Jupyter y MLflow
-CMD jupyter notebook --ip 0.0.0.0 --port 8888 --no-browser --allow-root & mlflow server --host 0.0.0.0 --port 8083 --default-artifact-root s3://mlflow/
+# Comando para iniciar MLflow
+CMD mlflow server --host 0.0.0.0 --port 8083 --default-artifact-root s3://mlflows3/artifacts --backend-store-uri sqlite:////mlflow.db --serve-artifacts
