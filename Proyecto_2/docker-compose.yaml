@@ -68,7 +68,7 @@ x-airflow-common:
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-scikit-learn pandas numpy catboost==1.2.0 mlflow}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-scikit-learn pandas numpy catboost==1.2.0 mlflow awscli boto3}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
@@ -84,18 +84,13 @@ x-airflow-common:
       condition: service_healthy
 services:
 
-  mlflow:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  jupyter:
+    build: .
     ports:
-      - "8083:8083"
-    environment:
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-      - AWS_ACCESS_KEY_ID=your_minio_access_key
-      - AWS_SECRET_ACCESS_KEY=your_minio_secret_key
-    depends_on:
-      - minio
+      - "8086:8888"
+    volumes:
+      - .:/work
+    command: ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
 
   minio:
     container_name: Minio
