@@ -7,4 +7,4 @@ WORKDIR /work
 COPY . .
 RUN pip install -r requirements.txt
 EXPOSE 8083
-ENTRYPOINT ["mlflow", "server", "--host", "0.0.0.0", "--default-artifact-root", "s3://mlflow/"]
+ENTRYPOINT ["mlflow", "server", "--host", "0.0.0.0", "--port", "8083", "--default-artifact-root", "s3://mlflow/"]

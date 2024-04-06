@@ -84,6 +84,13 @@ x-airflow-common:
       condition: service_healthy
 services:
 
+  mlflow:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+
   jupyter:
     image: jupyter/base-notebook:latest
     environment:
