@@ -91,7 +91,7 @@ services:
     volumes:
       - ./notebooks:/home/jovyan/work
     ports:
-      - "8090:8888"
+      - "8086:8086"
 
   minio:
     container_name: Minio
