@@ -97,7 +97,7 @@ services:
     environment:
       - JUPYTER_TOKEN=token
     volumes:
-      - ./notebooks:/home/jovyan/
+      - ./notebooks:/home/jovyan/notebooks
     ports:
       - "8086:8888"
     restart: unless-stopped
