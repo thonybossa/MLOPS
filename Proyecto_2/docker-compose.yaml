@@ -85,12 +85,17 @@ x-airflow-common:
 services:
 
   mlflow:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
-    restart: unless-stopped
+    environment:
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      - AWS_ACCESS_KEY_ID=your_minio_access_key
+      - AWS_SECRET_ACCESS_KEY=your_minio_secret_key
+    depends_on:
+      - minio
 
   minio:
     container_name: Minio

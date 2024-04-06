@@ -1,7 +1,7 @@
 FROM python:3.9
 
 # Variables de entorno para MLflow
-ARG MLFLOW_S3_ENDPOINT_URL=http://10.43.101.152:8088
+ENV MLFLOW_S3_ENDPOINT_URL=http://10.43.101.152:8088
 ARG AWS_ACCESS_KEY_ID=minioadmin
 ARG AWS_SECRET_ACCESS_KEY=minioadmin
 
