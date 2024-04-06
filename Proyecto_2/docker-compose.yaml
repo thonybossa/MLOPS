@@ -94,7 +94,7 @@ services:
 
   minio:
     container_name: Minio
-    command: server /data --console-address ":8089"
+    command: server --address ":8088" /data --console-address ":8089"
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin

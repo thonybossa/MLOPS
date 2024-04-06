@@ -7,7 +7,7 @@ User=estudiante
 Restart=on-failure
 RestartSec=3
 WorkingDirectory=/home/estudiante/MLOPS/Proyecto_2
-Environment=MLFLOW_S3_ENDPOINT_URL=http://http://10.43.101.152:8089
+Environment=MLFLOW_S3_ENDPOINT_URL=http://http://10.43.101.152:8088
 Environment=AWS_ACCESS_KEY_ID=minioadmin
 Environment=AWS_SECRET_ACCESS_KEY=minioadmin
 ExecStart= python3 -m mlflow server \
