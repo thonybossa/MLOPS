@@ -5,8 +5,16 @@ import pandas as pd
 from sqlalchemy import create_engine
 from airflow.decorators import dag , task 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 from catboost import CatBoostClassifier
 import pickle
+import mlflow
+import os
+
+os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://10.43.101.152:8089'  # Cambia esto a la URL de tu servidor MinIO
+os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin'  # Cambia esto a tu clave de acceso de MinIO
+os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin'  # Cambia esto a tu clave secreta de MinIO
+mlflow.set_tracking_uri("http://10.43.101.152:8083")
 
 @dag(start_date=datetime(2024, 3, 9), schedule_interval='@daily', catchup=False)
 def pipeline():
@@ -49,16 +57,30 @@ def pipeline():
         # Realizar la partición de los datos en conjuntos de entrenamiento y prueba
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-        # Crear una instancia del modelo CatBoostClassifier
-        model = CatBoostClassifier(cat_features=cat_features_indices)
+        # Inicia un experimento MLflow
+        with mlflow.start_run():
+        
+            # Crear una instancia del modelo CatBoostClassifier
+            model = CatBoostClassifier(cat_features=cat_features_indices)
 
-        # Entrenar el modelo
-        model.fit(X_train, y_train)
+            # Entrenar el modelo
+            model.fit(X_train, y_train)
+            
+            # Registra los parámetros del modelo
+            mlflow.log_param("coef", model.coef_)
+            mlflow.log_param("intercept", model.intercept_)
+            
+            # Realiza predicciones y calcula el error cuadrático medio
+            y_pred = model.predict(X_test)
 
-        #GUARDAMOS EL MODELO
-        with open('model_catboost.pkl', 'wb') as f:
+            # Calcula la precisión
+            accuracy = accuracy_score(y_test, y_pred)
 
-            pickle.dump(model, f)
+            # Registra la métrica del modelo
+            mlflow.log_metric("accuracy", accuracy)
+
+            # Guarda el modelo en el registro de MLflow
+            mlflow.sklearn.log_model(model, "model")
                
     load_data() >> clean_db() >> train()
 
