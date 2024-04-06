@@ -11,10 +11,11 @@ import pickle
 import mlflow
 import os
 
-os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://10.43.101.152:8089'  # Cambia esto a la URL de tu servidor MinIO
+os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://10.43.101.152:8088'  # Cambia esto a la URL de tu servidor MinIO
 os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin'  # Cambia esto a tu clave de acceso de MinIO
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin'  # Cambia esto a tu clave secreta de MinIO
 mlflow.set_tracking_uri("http://10.43.101.152:8083")
+mlflow.set_experiment("penguins")
 
 @dag(start_date=datetime(2024, 3, 9), schedule_interval='@daily', catchup=False)
 def pipeline():
