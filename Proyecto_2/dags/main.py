@@ -66,9 +66,10 @@ def pipeline():
             # Entrenar el modelo
             model.fit(X_train, y_train)
             
-            # Registra los parámetros del modelo
-            mlflow.log_param("coef", model.coef_)
-            mlflow.log_param("intercept", model.intercept_)
+            # Registra la importancia de las características del modelo
+            feature_importances = model.get_feature_importance()
+            for i, importance in enumerate(feature_importances):
+                mlflow.log_param(f"feature_{i}_importance", importance)
             
             # Realiza predicciones y calcula el error cuadrático medio
             y_pred = model.predict(X_test)
