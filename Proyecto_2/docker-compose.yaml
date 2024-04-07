@@ -85,7 +85,7 @@ x-airflow-common:
 services:
 
   jupyter:
-    build: .
+    build: ./Docker/jupyter
     ports:
       - "8086:8888"
     volumes:
@@ -105,6 +105,16 @@ services:
     volumes:
       - ./minio:/data
     restart: unless-stopped
+
+  mlflow:
+    build: 
+      context: .Docker/mlflow
+    ports:
+      - "8083:8083"
+    environment:
+      MLFLOW_S3_ENDPOINT_URL: "http://10.43.101.152:8088"
+      AWS_ACCESS_KEY_ID: "minioadmin"
+      AWS_SECRET_ACCESS_KEY: "minioadmin"
 
   mysql:
     image: mysql:latest
