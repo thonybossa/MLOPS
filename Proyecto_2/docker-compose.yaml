@@ -84,6 +84,34 @@ x-airflow-common:
       condition: service_healthy
 services:
 
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Base_de_Datos
+      MYSQL_USER: ab
+      MYSQL_PASSWORD: ab
+    volumes:
+      - mysql-data-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+    ports:
+      - "8082:8082"
+  admin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: root
+
   jupyter:
     build: ./Docker/Jupyter
     ports:
@@ -114,34 +142,9 @@ services:
       MLFLOW_S3_ENDPOINT_URL: "http://10.43.101.152:8088"
       AWS_ACCESS_KEY_ID: "minioadmin"
       AWS_SECRET_ACCESS_KEY: "minioadmin"
-
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: Base_de_Datos
-      MYSQL_USER: ab
-      MYSQL_PASSWORD: ab
-    volumes:
-      - mysql-data-volume:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    restart: always
-    ports:
-      - "8082:8082"
-  admin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
     depends_on:
+      - minio
       - mysql
-    ports:
-      - 8081:80
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: root
 
   redis:
     image: redis:latest
