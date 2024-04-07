@@ -114,11 +114,19 @@ services:
 
   jupyter:
     build: ./Docker/Jupyter
+    container_name: jupyter
+    environment:
+      # Jupyter configuration to use MinIO as S3 backend
+      MLFLOW_S3_ENDPOINT_URL: http://minio:8083  # It must match with the service name and MinIO port
+      AWS_ACCESS_KEY_ID: minioadmin  # MinIO credentials
+      AWS_SECRET_ACCESS_KEY: minioadmin
     ports:
       - "8086:8086"
+    restart: always
     volumes:
-      - .:/work
-    command: ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+    - ./Docker/Jupyter:/jupyter_code
+    stdin_open: true
+    tty: true
 
   minio:
     container_name: Minio
@@ -139,12 +147,21 @@ services:
     ports:
       - "8083:8083"
     environment:
-      MLFLOW_S3_ENDPOINT_URL: "http://10.43.101.152:8088"
+      MLFLOW_S3_ENDPOINT_URL: http://minio:8089
       AWS_ACCESS_KEY_ID: "minioadmin"
       AWS_SECRET_ACCESS_KEY: "minioadmin"
+      MLFLOW_S3_IGNORE_TLS: true
     depends_on:
       - minio
       - mysql
+    command: >
+      mlflow server 
+      --backend-store-uri mysql://root:airflow@mysql:8082/project_2 
+      --default-artifact-root minio://proyecto-2
+      --host 0.0.0.0 
+      --port 8083
+      --serve-artifacts
+    restart: always
 
   redis:
     image: redis:latest
