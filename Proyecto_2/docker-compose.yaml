@@ -87,7 +87,7 @@ services:
   jupyter:
     build: ./Docker/Jupyter
     ports:
-      - "8086:8888"
+      - "8086:8086"
     volumes:
       - .:/work
     command: ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
@@ -107,8 +107,7 @@ services:
     restart: unless-stopped
 
   mlflow:
-    build: 
-      context: .Docker/MLFlow
+    build: ./Docker/MLFlow
     ports:
       - "8083:8083"
     environment:

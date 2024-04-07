@@ -8,5 +8,5 @@ COPY . /work
 COPY ./requirements.txt /requirements.txt
 RUN pip install jupyter==1.0.0 -U && pip install jupyterlab==3.6.1
 RUN pip install -r requirements.txt
-EXPOSE 8888
-ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root"] 
+EXPOSE 8086
+ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root", "--port", "8086"]
