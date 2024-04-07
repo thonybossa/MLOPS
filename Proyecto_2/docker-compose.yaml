@@ -85,7 +85,7 @@ x-airflow-common:
 services:
 
   jupyter:
-    build: ./Docker/jupyter
+    build: ./Dockers/Jupyter
     ports:
       - "8086:8888"
     volumes:
@@ -108,7 +108,7 @@ services:
 
   mlflow:
     build: 
-      context: .Docker/mlflow
+      context: .Docker/MLFlow
     ports:
       - "8083:8083"
     environment:
