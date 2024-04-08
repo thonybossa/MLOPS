@@ -7,6 +7,8 @@ Integrantes:
 * José Luis Vega
 * Víctor Andrés De La Hoz
 
+        Último desarrollo asociado al último commit. Tuvimos problemas con unos archivos temporales que se trackearon y afectaron la ejecución.
+
 ## Desarrollo:
 A continuación encontrará las instrucciones relacionadas con la solución del proyecto 2. 
 
@@ -75,4 +77,6 @@ Este mismo servicio de mysql fue usado como almacenamiento de los metadatos de m
         }
     }
     ```
+    ![FastAPI](images/fastapi.png)
+
 Como se mencionó en la introducción, lo ideal es que simplemente se dispongan los puertos en los que se pueden observar los servicios, pero en caso de que se desee realizar pruebas, se puede hacer uso de los servicios de MinIO, Airflow, PgAdmin y MlFlow, anteriormente mencionados.
