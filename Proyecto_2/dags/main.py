@@ -13,8 +13,6 @@ from airflow.sensors.time_delta import TimeDeltaSensor
 from airflow.operators.dummy import DummyOperator
 from airflow.models import Variable
 import time
-restart_api = 0
-log = 0
 
 default_args = {
     'owner': 'airflow',
@@ -31,7 +29,7 @@ def pipeline():
     
     @task
     def load_data(index= int):
-        if index > 0:  # No esperar antes de la primera ejecución
+        if index > 0:  
             time.sleep(300)
 
         if index == 0 :
@@ -103,9 +101,8 @@ def pipeline():
     start = DummyOperator(task_id='start')
     prev_task = start
 
-    for i in range(10):
+    for i in range(2): # aca se cambia el parametro para el numero de batch
         load_task = load_data(i)
-        # Con time.sleep ya incluido en load_data, ya no necesitas TimeDeltaSensor
         prev_task = prev_task >> load_task
 
     train_task = train()

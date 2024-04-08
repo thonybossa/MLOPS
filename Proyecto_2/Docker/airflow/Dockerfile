@@ -29,3 +29,4 @@ RUN pip install boto3==1.26.121
 RUN pip install requests==2.28.2
 RUN pip install pymysql==1.1.0
 RUN pip install mysqlclient
+RUN pip install mysql-connector-python
