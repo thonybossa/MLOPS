@@ -1,15 +1,15 @@
-
 import os
 import mlflow
 import requests
 import numpy as np
 import pandas as pd
+import time
+import pickle
 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
-
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
@@ -17,12 +17,11 @@ from sqlalchemy import create_engine
 from airflow.decorators import dag , task 
 from sklearn.model_selection import train_test_split
 from catboost import CatBoostClassifier
-import pickle
 from sqlalchemy import create_engine , inspect
 from airflow.sensors.time_delta import TimeDeltaSensor
 from airflow.operators.dummy import DummyOperator
+from sklearn.metrics import confusion_matrix
 from airflow.models import Variable
-import time
 
 default_args = {
     'owner': 'airflow',
@@ -103,27 +102,52 @@ def pipeline():
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         # Crear una instancia del modelo CatBoostClassifier
-        model = CatBoostClassifier()
+        models = [
+                ("CatBoost_Default", CatBoostClassifier()),
+                ("CatBoost_Custom", CatBoostClassifier(iterations=100, depth=6, learning_rate=0.1))
+                ]
+        
+        # Entrenamiento y registro de métricas para cada modelo
+        for model_name, model in models:
+            with mlflow.start_run(run_name=f"{model_name}_exec"):
+                # Entrenamiento del modelo
+                model.fit(X_train, y_train,cat_features=cat_features_indices)
 
-        with mlflow.start_run(run_name="covertype_exec"):
-            model.fit(X_train, y_train, cat_features=cat_features_indices)
-            # Registrar parámetros
-            params = model.get_all_params()
-            mlflow.log_params(params)
+                # Registro de parámetros
+                params = model.get_all_params()
+                mlflow.log_params(params)
 
-            # Registrar modelo
-            mlflow.catboost.log_model(model, "cover-type-model")
+                # Registro del modelo
+                mlflow.catboost.log_model(model, f"{model_name}_model")
+
+                # Predicción en el conjunto de prueba
+                y_pred = model.predict(X_test)
+                
+                # Cálculo de métricas
+                train_accuracy = model.score(X_train, y_train)
+                test_accuracy = model.score(X_test, y_test)
+                cm = confusion_matrix(y_test, y_pred)
+
+                # Registro de métricas
+                mlflow.log_metric(f"{model_name}_train_accuracy", train_accuracy)
+                mlflow.log_metric(f"{model_name}_test_accuracy", test_accuracy)
+                
+                # Registro de la matriz de confusión
+                for i in range(len(cm)):
+                    for j in range(len(cm[i])):
+                        mlflow.log_metric(f"{model_name}_confusion_matrix_{i}_{j}", cm[i][j])
 
     start = DummyOperator(task_id='start')
     prev_task = start
 
-    for i in range(10): # aca se cambia el parametro para el numero de batch
+    for i in range(1): # aca se cambia el parametro para el numero de batch
         load_task = load_data(i)
         prev_task = prev_task >> load_task
 
     train_task = train()
-    prev_task >> train_task
-
-    
+    prev_task >> train_task   
 
 dag_instance = pipeline()
+
+
+
