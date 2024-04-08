@@ -1,3 +1,4 @@
+#Creacion de la imagen de jupyter
 FROM python:3.9
 ARG MLFLOW_S3_ENDPOINT_URL=http://10.43.101.152:8089
 ARG AWS_ACCESS_KEY_ID=minioadmin
