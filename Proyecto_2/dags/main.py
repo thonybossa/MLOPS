@@ -1,14 +1,23 @@
+
+import os
+import mlflow
+import requests
+import numpy as np
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
-import mlflow
-import pandas as pd
 from sqlalchemy import create_engine
 from airflow.decorators import dag , task 
 from sklearn.model_selection import train_test_split
 from catboost import CatBoostClassifier
 import pickle
-import requests
 from sqlalchemy import create_engine , inspect
 from airflow.sensors.time_delta import TimeDeltaSensor
 from airflow.operators.dummy import DummyOperator
@@ -75,11 +84,7 @@ def pipeline():
         df_final = pd.read_sql_table('covered_type', con=engine)
         df_final = df_final.dropna()
         df_final.drop(columns=['batch'], inplace=True)
-        feature_names = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology',
-       'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways',
-       'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm',
-       'Horizontal_Distance_To_Fire_Points', 'Wilderness_Area', 'Soil_Type',
-       'Cover_Type']
+        feature_names = ['Wilderness_Area', 'Soil_Type']
         cat_features_indices = [df_final.columns.get_loc(name) for name in feature_names]  # Obtiene los índices de las columnas categóricas
 
         # Dividir los datos en características (X) y variable objetivo (y)
@@ -94,7 +99,7 @@ def pipeline():
 
         mlflow.sklearn.autolog(log_model_signatures=True, log_input_examples=True, registered_model_name="best_model")
         with mlflow.start_run(run_name="autolog_pipe_model_reg") as run:
-            search.fit(X_train, y_train)
+            model.fit(X_train, y_train, cat_features=cat_features_indices)
 
     start = DummyOperator(task_id='start')
     prev_task = start
