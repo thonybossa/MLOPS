@@ -111,3 +111,7 @@ config.json
 .idea
 .DS_Store
 Proyecto_1/data/sql/proyecto.db
+
+*.meta
+*.sys
+*/Proyecto_2/logs/scheduler/latest.*
