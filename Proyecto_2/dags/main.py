@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
+import mlflow
 import pandas as pd
 from sqlalchemy import create_engine
 from airflow.decorators import dag , task 
@@ -98,7 +99,7 @@ def pipeline():
     start = DummyOperator(task_id='start')
     prev_task = start
 
-    for i in range(2): # aca se cambia el parametro para el numero de batch
+    for i in range(1): # aca se cambia el parametro para el numero de batch
         load_task = load_data(i)
         prev_task = prev_task >> load_task
 
