@@ -73,6 +73,7 @@ def pipeline():
 
         df_final = pd.read_sql_table('covered_type', con=engine)
         df_final = df_final.dropna()
+        df_final.drop(columns=['batch'], inplace=True)
         feature_names = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology',
        'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways',
        'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm',
@@ -80,23 +81,19 @@ def pipeline():
        'Cover_Type']
         cat_features_indices = [df_final.columns.get_loc(name) for name in feature_names]  # Obtiene los índices de las columnas categóricas
 
-
         # Dividir los datos en características (X) y variable objetivo (y)
         X = df_final.drop('Cover_Type', axis=1)
         y = df_final['Cover_Type']
-
+        
         # Realizar la partición de los datos en conjuntos de entrenamiento y prueba
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
+        
         # Crear una instancia del modelo CatBoostClassifier
         model = CatBoostClassifier()
 
-        # Entrenar el modelo
-        model.fit(X_train, y_train , cat_features=cat_features_indices )
-
-        # Guardar el modelo
-        with open('model_catboost.pkl', 'wb') as f:
-            pickle.dump(model, f)
+        mlflow.sklearn.autolog(log_model_signatures=True, log_input_examples=True, registered_model_name="best_model")
+        with mlflow.start_run(run_name="autolog_pipe_model_reg") as run:
+            search.fit(X_train, y_train)
 
     start = DummyOperator(task_id='start')
     prev_task = start
