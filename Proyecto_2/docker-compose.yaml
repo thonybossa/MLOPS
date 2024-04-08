@@ -39,6 +39,8 @@ x-airflow-common:
       condition: service_healthy
     postgres:
       condition: service_healthy
+    mlflow:
+      condition: service_healthy
 
 services:
 

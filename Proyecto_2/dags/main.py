@@ -33,6 +33,14 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
+# Config
+os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://minio:9000"
+os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin'
+os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin'
+
+mlflow.set_tracking_uri("http://mlflow:8083")
+mlflow.set_experiment('covertype')
+
 @dag(start_date=datetime(2024, 3, 9), schedule_interval='@daily', catchup=False)
 def pipeline():
 
@@ -98,7 +106,7 @@ def pipeline():
         model = CatBoostClassifier()
 
         mlflow.sklearn.autolog(log_model_signatures=True, log_input_examples=True, registered_model_name="best_model")
-        with mlflow.start_run(run_name="autolog_pipe_model_reg") as run:
+        with mlflow.start_run(run_name="autolog_pipe_model_reg"):
             model.fit(X_train, y_train, cat_features=cat_features_indices)
 
     start = DummyOperator(task_id='start')
