@@ -105,9 +105,14 @@ def pipeline():
         # Crear una instancia del modelo CatBoostClassifier
         model = CatBoostClassifier()
 
-        mlflow.sklearn.autolog(log_model_signatures=True, log_input_examples=True, registered_model_name="best_model")
-        with mlflow.start_run(run_name="autolog_pipe_model_reg"):
+        with mlflow.start_run(run_name="covertype_exec"):
             model.fit(X_train, y_train, cat_features=cat_features_indices)
+            # Registrar parámetros
+            params = model.get_all_params()
+            mlflow.log_params(params)
+
+            # Registrar modelo
+            mlflow.catboost.log_model(model, "cover-type-model")
 
     start = DummyOperator(task_id='start')
     prev_task = start
