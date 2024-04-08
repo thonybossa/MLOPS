@@ -18,7 +18,8 @@ EXPOSE 8083
 
 # Run mlflow server when the container launches
 CMD ["python3", "-m", "mlflow", "server", \
-     "--backend-store-uri", "sqlite:////home/estudiante/MLOPS/Proyecto_2/mlflow.db", \
-     "--default-artifact-root", "s3://mlflows3/artifacts", \
+     "--backend-store-uri", "mysql+mysqldb://ab:ab@mysql/Base_de_Datos", \
+     "--default-artifact-root", "minio://proyecto-2", \
      "--host", "0.0.0.0:8083", \
      "--serve-artifacts"]
+
