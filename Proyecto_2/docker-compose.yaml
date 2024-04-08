@@ -101,6 +101,15 @@ services:
       - ./minio_data:/data
     restart: unless-stopped
 
+  fastapi:
+    build: ./docker/fastapi
+    container_name: fastapi
+    ports:
+      - '8085:8085'
+    volumes:
+      - ./docker/fastapi/api/main.py:/main.py
+    restart: always
+
   mlflow:
     build: ./docker/mlflow  
     container_name: mlflow

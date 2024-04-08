@@ -1,18 +1,15 @@
 from pydantic import BaseModel
 
-class PenguinData(BaseModel):
-    studyName: str = "PAL0708"
-    Sample_Number: int = 1
-    Region: str = "Anvers"
-    Island: str = "Torgersen"
-    Stage: str = "Adult, 1 Egg Stage"
-    Individual_ID: str = "N1A1"
-    Clutch_Completion: str = "Yes"
-    Date_Egg: str = "11/11/07"
-    Culmen_Length_mm: float = 39.1
-    Culmen_Depth_mm: float = 18.7
-    Flipper_Length_mm: float = 181.0
-    Body_Mass_g: float = 3750.0
-    Sex: str = "Male"
-    Delta_15_N: str = "NaN"
-    Delta_13_C: str = "NaN"
+class CoverType(BaseModel):
+    Elevation: int = 3154
+    Aspect: int = 351
+    Slope: int = 13
+    Horizontal_Distance_To_Hydrology: int =150
+    Vertical_Distance_To_Hydrology: int = 31
+    Horizontal_Distance_To_Roadways: int =2023
+    Hillshade_9am: int = 196
+    Hillshade_Noon: int = 217
+    Hillshade_3pm: int = 159
+    Horizontal_Distance_To_Fire_Points: int =1828
+    Wilderness_Area: str = "Rawah"
+    Soil_Type: str = "C7745"
