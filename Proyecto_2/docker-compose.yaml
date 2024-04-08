@@ -105,7 +105,7 @@ services:
     build: ./docker/mlflow  
     container_name: mlflow
     environment:
-      MLFLOW_S3_ENDPOINT_URL: http://minio:8089
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
       AWS_ACCESS_KEY_ID: minioadmin 
       AWS_SECRET_ACCESS_KEY: minioadmin
       MLFLOW_S3_IGNORE_TLS: true
