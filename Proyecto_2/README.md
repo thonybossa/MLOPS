@@ -7,15 +7,25 @@ Integrantes:
 * José Luis Vega
 * Víctor Andrés De La Hoz
 
-        Último desarrollo asociado al último commit. Tuvimos problemas con unos archivos temporales que se trackearon y afectaron la ejecución.
+## Puertos para acceder a los servicios:
+Este proyecto se encuentra desplegado en las siguientes direcciones:
+* Streamlit: `http://10.43.101.152:8087`
+* airflow: `http://10.43.101.152:8080`
+    * Usuario: airflow
+    * Contraseña: airflow
+* mlflow: `http://10.43.101.152:8083`
+* MinIO: `http://10.43.101.152:8089`
+    * Usuario: minioadmin
+    * Contraseña: minioadmin
+* Admin (acceder a la base de datos MySQL): `http://10.43.101.152:8081`
+    * Usuario: ab
+    * Contraseña: ab
+* MySQL: `http://10.43.101.152:8082` (se puede visualizar desde Admin)
+* 
 
-## Desarrollo:
-A continuación encontrará las instrucciones relacionadas con la solución del proyecto 2. 
 
-*Nota: La solución final de este proyecto debería estar dispuesto en la máquina virtual 10.43.101.152 pero por restricciones de uso, se ha dispuesto de manera local. En caso de que se use la máquina virtual, algunos cambios son necesarios, principalmente en los puertos.*
-
-## Desarrollo:
-A continuación encontrará las instrucciones relacionadas con la solución del proyecto 2.
+## Instrucciones Construcción de la solución:
+A continuación encontrará las instrucciones para replicar este desarrollo.
 
 1. Clone el repositorio usando el comando:
 
