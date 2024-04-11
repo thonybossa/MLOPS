@@ -5,7 +5,7 @@ x-airflow-common:
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.0}
-  build: 
+  build:
     context: ./docker/airflow
   environment:
     &airflow-common-env
@@ -68,11 +68,11 @@ services:
       MYSQL_USER: ab
       MYSQL_PASSWORD: ab
     ports:
-      - "8082:8082"
+      - "8082:3306"
     volumes:
       - mysql-data-volume:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -113,11 +113,11 @@ services:
     restart: always
 
   mlflow:
-    build: ./docker/mlflow 
+    build: ./docker/mlflow
     container_name: mlflow
     environment:
       MLFLOW_S3_ENDPOINT_URL: http://minio:9000
-      AWS_ACCESS_KEY_ID: minioadmin 
+      AWS_ACCESS_KEY_ID: minioadmin
       AWS_SECRET_ACCESS_KEY: minioadmin
       MLFLOW_S3_IGNORE_TLS: "true"
     ports:
@@ -138,8 +138,8 @@ services:
     build: ./docker/jupyter
     container_name: jupyter
     environment:
-      MLFLOW_S3_ENDPOINT_URL: http://minio:8089 
-      AWS_ACCESS_KEY_ID: minioadmin 
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+      AWS_ACCESS_KEY_ID: minioadmin
       AWS_SECRET_ACCESS_KEY: minioadmin
       JUPYTER_TOKEN: "token"
     ports:
@@ -154,7 +154,7 @@ services:
     build: ./docker/streamlit
     container_name: streamlit
     ports:
-      - "8501:8501"
+      - "8087:8087"
     restart: always
 
   redis:

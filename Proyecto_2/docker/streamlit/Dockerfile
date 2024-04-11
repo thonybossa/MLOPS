@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expone el puerto 8501 (puerto predeterminado de Streamlit)
-EXPOSE 8501
+EXPOSE 8087
 
 # Comando para ejecutar la aplicación Streamlit
-CMD ["streamlit", "run", "app.py"]
+CMD ["streamlit", "run", "app.py", "--server.port", "8087"]
