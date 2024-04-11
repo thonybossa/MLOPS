@@ -7,7 +7,7 @@ Integrantes:
 * José Luis Vega
 * Víctor Andrés De La Hoz
 
-## Puertos para acceder a los servicios:
+## Puertos para acceder a los servicios en máquina virtual:
 Este proyecto se encuentra desplegado en las siguientes direcciones:
 * Streamlit: `http://10.43.101.152:8087`
 * airflow: `http://10.43.101.152:8080`
@@ -21,10 +21,8 @@ Este proyecto se encuentra desplegado en las siguientes direcciones:
     * Usuario: ab
     * Contraseña: ab
 * MySQL: `http://10.43.101.152:8082` (se puede visualizar desde Admin)
-* 
 
-
-## Instrucciones Construcción de la solución:
+## Instrucciones para construcción local de la solución:
 A continuación encontrará las instrucciones para replicar este desarrollo.
 
 1. Clone el repositorio usando el comando:
@@ -89,4 +87,6 @@ Este mismo servicio de mysql fue usado como almacenamiento de los metadatos de m
     ```
     ![FastAPI](images/fastapi.png)
 
-Como se mencionó en la introducción, lo ideal es que simplemente se dispongan los puertos en los que se pueden observar los servicios, pero en caso de que se desee realizar pruebas, se puede hacer uso de los servicios de MinIO, Airflow, PgAdmin y MlFlow, anteriormente mencionados.
+9. Finalmente, dirijase a la dirección `localhost:8087` en la que se desplegará una web de Streamlit:
+
+    ![Streamlit](images/streamlit.png)
