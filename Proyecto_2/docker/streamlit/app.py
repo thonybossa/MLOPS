@@ -34,9 +34,9 @@ def main():
     with col2:
         st.link_button("Repositorio del equipo", "https://github.com/thonybossa/MLOPS")
     with col4:
-        st.link_button("MLFLOW", "http://mlflow:8083")
+        st.link_button("MLFLOW", "http://10.43.101.152:8083")
     with col6:
-        st.link_button("AirFlow", "http://airflow:8080")
+        st.link_button("AirFlow", "http://10.43.101.152:8080")
     st.divider()
     cols = st.columns(4)
 
