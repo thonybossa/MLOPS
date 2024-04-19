@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pandas
+mlflow
+catboost
+boto3
+awscli

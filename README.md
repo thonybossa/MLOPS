@@ -9,6 +9,7 @@ A continuación, se describen las actividades desarrolladas:
 | [Taller 1](https://github.com/thonybossa/MLOPS/tree/main/Taller_1)| Construcción de modelo de machine learning puesto en producción a partir de FastAPI y Dockerfile |
 | [Taller 2](https://github.com/thonybossa/MLOPS/tree/main/Taller_2) | Implementación de docker-compose.yml con una imagen de tfx |
 | [Taller 3](https://github.com/thonybossa/MLOPS/tree/main/Taller_3)| Creación de instancia AirFlow y gestión de DAG |
+| [Taller 4](https://github.com/thonybossa/MLOPS/tree/main/Taller_3)| Construcción de docker-compose a partir de imagen en DockerHub para inferencia de modelo en una API y testeada con Locust|
 | | |
 
 
