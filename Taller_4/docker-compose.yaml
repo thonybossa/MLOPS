@@ -105,19 +105,12 @@ services:
 
   fastapi:
     build: ./docker/fastapi
-    container_name: inference
-    environment:
-      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
-      AWS_ACCESS_KEY_ID: minioadmin
-      AWS_SECRET_ACCESS_KEY: minioadmin
-      MLFLOW_S3_IGNORE_TLS: "true"
-      MLFLOW_TRACKING_URI: http://mlflow:5000
-      DEFAULT_ARTIFACT_ROOT: s3://mlflows3/
+    container_name: fastapi
     ports:
       - '8085:8085'
+    volumes:
+      - ./docker/fastapi/api/main.py:/main.py
     restart: always
-    networks:
-      - network1
 
   mlflow:
     build: ./docker/mlflow
@@ -363,7 +356,3 @@ volumes:
   mysql-data-volume:
   minio_data:
 
-networks:
-  network1:
-    name: p2_default
-    external: true
