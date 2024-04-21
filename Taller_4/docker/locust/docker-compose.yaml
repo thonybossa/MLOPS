@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+
+  locustmaster:
+    container_name: locustmaster
+    build: .
+    ports:
+     - "8090:8090"
+    volumes:
+      - ./docker/locust:/locust
+    command: -f locustfile.py --master --web-port 8090
+    restart: always
+    networks:
+      - network1
+  
+  locustworker:
+    container_name: locustworker
+    build: .
+    volumes:
+      - ./docker/locust:/locust
+    command: -f locustfile.py --worker --master-host locustmaster
+    restart: always
+    networks:
+      - network1
+
+networks:
+  network1:
+    name: proyecto_2_default
+    external: true
+
+
