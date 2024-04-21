@@ -6,10 +6,10 @@ services:
     container_name: locustmaster
     build: .
     ports:
-     - "8090:8090"
+     - "8086:8086"
     volumes:
       - ./docker/locust:/locust
-    command: -f locustfile.py --master --web-port 8090
+    command: -f locustfile.py --master --web-port 8086
     restart: always
     networks:
       - network1
