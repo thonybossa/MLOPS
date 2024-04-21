@@ -1,4 +1,4 @@
-# Proyecto 2 MLOPS
+# Taller 4 MLOPS
 
 Desarrollado por **Grupo 3**.
 
@@ -7,86 +7,62 @@ Integrantes:
 * José Luis Vega
 * Víctor Andrés De La Hoz
 
-## Puertos para acceder a los servicios en máquina virtual:
-Este proyecto se encuentra desplegado en las siguientes direcciones:
-* Streamlit: `http://10.43.101.152:8087`
-* airflow: `http://10.43.101.152:8080`
-    * Usuario: airflow
-    * Contraseña: airflow
-* mlflow: `http://10.43.101.152:8083`
-* MinIO: `http://10.43.101.152:8089`
-    * Usuario: minioadmin
-    * Contraseña: minioadmin
-* Admin (acceder a la base de datos MySQL): `http://10.43.101.152:8081`
-    * Usuario: ab
-    * Contraseña: ab
-* MySQL: `http://10.43.101.152:8082` (se puede visualizar desde Admin)
+## Desarrollo:
+A continuación encontrará el paso a paso para realizar push de una imagen de FastAPI a Dockerhub y realizar pruebas de carga con Locust.
 
-## Instrucciones para construcción local de la solución:
-A continuación encontrará las instrucciones para replicar este desarrollo.
+> [!WARNING] 
+>
+> Este taller depende del [proyecto 2](), por lo que se asume que ya se tiene una imagen de FastAPI creada y funcional.
 
-1. Clone el repositorio usando el comando:
+### 1. Carga de imagen en Dockerhub
+Usando la imagen de FastAPI creada en el [proyecto 2](https://github.com/thonybossa/MLOPS/tree/main/Proyecto_2) procedemos a subirla a Dockerhub, siguiendo los siguientes pasos:
+1. Iniciar sesión en Dockerhub.
+2. En la terminal de la máquina donde existe la imagen de FastAPI, ejecutar el siguiente comando:
+```bash
+docker tag proyecto_2-fastapi:latest thonybossa/taller4_mlops:fastapi
+```
+3. Realizar el push de la imagen al repositorio de Dockerhub:
+```bash
+docker push thonybossa/taller4_mlops:fastapi
+```
+4. Verificar que la imagen se haya subido correctamente en Dockerhub. La imagen se puede ver en el siguiente enlace: [FastAPI en Dockerhub](https://hub.docker.com/repository/docker/thonybossa/taller4_mlops)
+![dockerhub](images/dockerhub.png)
 
-    `git clone https://github.com/thonybossa/MLOPS.git`
+### 2. Levantar la imagen y el servicio de inferencia
+Como ya se tiene la imagen publicada, escribimos un archivo docker-compose para levantar el servicio de FastAPI en la máquina virtual. El archivo lo puede ver [acá](https://github.com/thonybossa/MLOPS/blob/main/Taller_4/docker/dockerhub/docker-compose.yaml). En este caso, lo nombramos como `inference`, de manera que se puediera distinguir del de fastapi. Para levantarlo se ejecuta el siguiente comando:
+```bash
+docker-compose up
+```
 
-2. Ubiquese en el directorio correspondiente al proyecto 2:
+### 3. Creación del servicio de Locust
+Se crea un servicio de Locust usando dockercompose para realizar pruebas de carga a la API de FastAPI. El archivo lo puede ver [acá](https://github.com/thonybossa/MLOPS/blob/main/Taller_4/docker/locust/docker-compose.yaml). 
 
-    `cd MLOPS/Proyecto_2`
+Este servicio se configuró de tal manera que se aprovechara al máximo los recursos del contendor, para esto se añadieron las siguientes especificaciones
+```yaml
+deploy:
+    mode: replicated
+    replicas: 1
+    resources:
+        limits:
+        cpus: '2'
+        memory: 500M
+        reservations:
+        cpus: '0.25'
+        memory: 200M
+```
 
-3. Ejecute desde la terminal el comando
-    ```bash
-    docker-compose up
-    ```
-4. Dirijase a un buscador y escriba la dirección `localhost:8089` en la que se desplegará una web de MinIO en donde deberá colocar las credenciales:
-    * Usuario: minioadmin
-    * Contraseña: minioadmin
+El servicio está desplegado en esta dirección: [Locust Equipo 3](http://10.43.101.152:8086/). 
 
-    - Cree un bucket llamado `proyecto-2`.
+Para garantizar que tanto el servicio de locust como el de la nueva imagen de FastAPI estén en la misma red, se crea una red en docker y se añaden los servicios a esta red. Para ello, se ejecutan los siguientes comandos:
+```bash
+docker network create proyecto_2_default
+```
 
-    ![MinIO](images/minio.png)
+### 4. Pruebas de carga
+Ya en la interfaz de Locust, se configura la prueba de carga a realizar:
 
-6. Ahora, dirijase a un buscador y escriba la dirección `localhost:8080` en la que se desplegará una web de airflow en donde deberá colocar las credenciales:
-    * Usuario: airflow
-    * Contraseña: airflow
+![init](images/locustinit.png)
 
-    ![Airflow](images/airflow.png)
+Al darle start, se inicia la prueba de carga, observará una interfaz parecida a esta:
 
-5. Active y ejecute el Dag para verificar su ejecución. Este Dag, consiste en la extracción de datos de una API, construcción de una tabla en una base de datos y la generación de un modelo de clasificación al que le podrá realizar seguimiento desde mlflow. En caso de querer revisar cómo están almacenandose los datos, podrá dirigirse a la dirección `localhost:8081` en donde encontrará una interfaz de pgAdmin en la que podrá colocar las credenciales:
-    * Usuario: ab
-    * Contraseña: ab
-Este mismo servicio de mysql fue usado como almacenamiento de los metadatos de mlflow, allí podrá verificarlo.
-
-    ![pgAdmin](images/mysql.png)
-
-6. La dirección donde se encuentra MlFlow es `localhost:8083`. Allí podrá observar las ejecuciones de los experimentos, sus parámetros y métricas.
-
-    ![MlFlow](images/mlflow.png)
-
-7. Para garantizar la ejecución de la API, es necesario que previamente, tenga ejecutado y guardado un modelo como "best_model" con el tag de producción. Para esto, en la interfaz de mlflow seleccione un modelo, parese en alguna version y en tag escoja "Producción".
-
-    ![Modelo](images/bestmodel.png)
-
-8. Dirijase a la dirección `localhost:8085/docs` en la que se desplegará una web de FastAPI en donde podrá realizar peticiones POST a la dirección `localhost:8085/predict` con el siguiente formato:
-    ```json
-    {
-        "data": {
-            "Elevation": 3154,
-            "Aspect": 351,
-            "Slope": 13,
-            "Horizontal_Distance_To_Hydrology": 150,
-            "Vertical_Distance_To_Hydrology": 31,
-            "Horizontal_Distance_To_Roadways": 2023,
-            "Hillshade_9am": 196,
-            "Hillshade_Noon": 217,
-            "Hillshade_3pm": 159,
-            "Horizontal_Distance_To_Fire_Points": 1828,
-            "Wilderness_Area": "Rawah",
-            "Soil_Type": "C7745"
-        }
-    }
-    ```
-    ![FastAPI](images/fastapi.png)
-
-9. Finalmente, dirijase a la dirección `localhost:8087` en la que se desplegará una web de Streamlit:
-
-    ![Streamlit](images/streamlit.png)
+![locust](images/locust.png)
