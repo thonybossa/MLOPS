@@ -12,7 +12,7 @@ A continuación encontrará el paso a paso para realizar push de una imagen de F
 
 > [!WARNING] 
 >
-> Este taller depende del [proyecto 2](), por lo que se asume que ya se tiene una imagen de FastAPI creada y funcional.
+> Este taller depende del [proyecto 2](https://github.com/thonybossa/MLOPS/tree/main/Proyecto_2), por lo que se asume que ya se tiene una imagen de FastAPI creada y funcional.
 
 ### 1. Carga de imagen en Dockerhub
 Usando la imagen de FastAPI creada en el [proyecto 2](https://github.com/thonybossa/MLOPS/tree/main/Proyecto_2) procedemos a subirla a Dockerhub, siguiendo los siguientes pasos:
