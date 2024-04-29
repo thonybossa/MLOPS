@@ -1,0 +1,11 @@
+mlflow
+pycaret
+scikit-learn
+scipy
+boto3
+requests
+pymysql
+mysqlclient
+apache-airflow
+catboost
+mysql-connector-python

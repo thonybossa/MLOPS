@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build: .
+    container_name: fastapi_data_app
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./Diabetes:/Diabetes
+      - ./main/read_data_api.py:/read_data_api.py
+    restart: always
