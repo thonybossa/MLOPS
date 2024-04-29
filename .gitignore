@@ -116,4 +116,4 @@ Proyecto_1/data/sql/proyecto.db
 *.sys
 */Proyecto_2/logs/scheduler/latest.*
 
-*/Proyecto_3/data/*
+Proyecto_3/data
