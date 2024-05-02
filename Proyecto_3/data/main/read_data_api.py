@@ -1,5 +1,4 @@
 from fastapi import FastAPI, HTTPException
-from typing import Optional
 import random
 import json
 import time
@@ -7,13 +6,11 @@ import csv
 import os
 
 MIN_UPDATE_TIME = 5
-GROUP_NUMBER = "3" 
-
 app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"Proyecto 3": "Extracción de Base de Datos de Diabetes"}
+    return {"Proyecto": "Extracción de Base de Datos de Diabetes"}
 
 data = []
 with open("Diabetes/df_train_data.csv", newline="") as csvfile:
@@ -36,70 +33,57 @@ with open("Diabetes/df_validation_data.csv", newline="") as csvfile:
     for row in reader:
         validation_data.append(row)
 
-
-
 batch_size = len(data) // 6
 
-
-# Definir la función para generar la fracción de datos aleatoria
 def get_batch_data(batch_number: int, batch_size: int = batch_size):
     start_index = batch_number * batch_size
     end_index = start_index + batch_size
-    # Obtener datos aleatorios dentro del rango del grupo
     random_data = random.sample(data[start_index:end_index], batch_size)
     return random_data
 
-if os.path.isdir(f"/Diabetes/timestamp") == False:
-    os.mkdir(f"/Diabetes/timestamp")
+if not os.path.isdir("Diabetes/timestamp"):
+    os.mkdir("Diabetes/timestamp")
 
-
-if os.path.isfile("/Diabetes/timestamp/timestamps.json"):
-    with open("/Diabetes/timestamp/timestamps.json", "r") as f:
+if os.path.isfile("Diabetes/timestamp/timestamps.json"):
+    with open("Diabetes/timestamp/timestamps.json", "r") as f:
         timestamps = json.load(f)
 else:
-    timestamps = {GROUP_NUMBER: [0, -1]}
+    timestamps = [0, -1]  # Eliminación de la referencia a GROUP_NUMBER
 
-# Definir la ruta de la API
 @app.get("/data_train")
 async def read_data():
     global timestamps
 
-    if timestamps[GROUP_NUMBER][1] >= 6:
-        raise HTTPException(status_code=400,detail="Ya se recolectó toda la información minima necesaria")
+    if timestamps[1] >= 6:
+        raise HTTPException(status_code=400, detail="Ya se recolectó toda la información mínima necesaria")
 
     current_time = time.time()
-    last_update_time = timestamps[GROUP_NUMBER][0]
+    last_update_time = timestamps[0]
 
     if current_time - last_update_time > MIN_UPDATE_TIME:
-        timestamps[GROUP_NUMBER][0] = current_time
-        timestamps[GROUP_NUMBER][1] += 1
+        timestamps[0] = current_time
+        timestamps[1] += 1
 
-    random_data = get_batch_data(timestamps[GROUP_NUMBER][1])
-    with open("/Diabetes/timestamp/timestamps.json", "w") as file:
+    random_data = get_batch_data(timestamps[1])
+    with open("Diabetes/timestamp/timestamps.json", "w") as file:
         file.write(json.dumps(timestamps))
 
-    return {"group_number": GROUP_NUMBER, "batch_number": timestamps[GROUP_NUMBER][1] + 1,"data": random_data}
+    return {"batch_number": timestamps[1] + 1, "data": random_data}
 
-
-# Get data in batches
 @app.get("/data_validation")
 async def read_data_validation():
     return {"data": validation_data}
 
-
-# Get data in batches
 @app.get("/data_test")
 async def read_data_test():
     return {"data": test_data}
 
-
 @app.get("/restart_data_generation")
 async def restart_data():
-    timestamps[GROUP_NUMBER][0] = 0
-    timestamps[GROUP_NUMBER][1] = -1
-    with open("/Diabetes/timestamp/timestamps.json", "w") as file:
+    timestamps[0] = 0
+    timestamps[1] = -1
+    with open("Diabetes/timestamp/timestamps.json", "w") as file:
         file.write(json.dumps(timestamps))
-
     return {"ok"}
 
 if __name__ == "__main__":
