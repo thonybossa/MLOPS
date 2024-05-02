@@ -6,7 +6,7 @@ Proyecto_1/data/
 # C extensions
 *.so
 
-Proyecto_3/logs/
+Proyecto_3/logs
 Proyecto_3/minio_data/proyecto-3/
 # Distribution / packaging
 .Python

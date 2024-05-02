@@ -1,15 +1,23 @@
 from pydantic import BaseModel
 
-class CoverType(BaseModel):
-    Elevation: int = 3154
-    Aspect: int = 351
-    Slope: int = 13
-    Horizontal_Distance_To_Hydrology: int =150
-    Vertical_Distance_To_Hydrology: int = 31
-    Horizontal_Distance_To_Roadways: int =2023
-    Hillshade_9am: int = 196
-    Hillshade_Noon: int = 217
-    Hillshade_3pm: int = 159
-    Horizontal_Distance_To_Fire_Points: int =1828
-    Wilderness_Area: str = "Rawah"
-    Soil_Type: str = "C7745"
+class PatientData(BaseModel):
+    race: str = "AfricanAmerican"
+    gender: str = "Female"
+    age: str = "[60-70)"
+    admission_type_id: str = "1"
+    discharge_disposition_id: str = "3"
+    admission_source_id: str = "5"
+    time_in_hospital: str = "7"
+    medical_specialty: str = "Nephrology"
+    num_lab_procedures: str = "47"
+    num_procedures: str = "2"
+    num_medications: str = "29"
+    number_emergency: str = "0"
+    number_inpatient: str = "1"
+    diag_1: str = "38"
+    diag_2: str = "263"
+    diag_3: str = "403"
+    number_diagnoses: str = "9"
+    insulin: str = "Steady"
+    change: str = "Ch"
+    diabetesMed: str = "Yes"

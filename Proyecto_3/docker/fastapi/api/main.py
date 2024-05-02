@@ -8,12 +8,12 @@ import mlflow
 os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://minio:9000"
 os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin'
-
 mlflow.set_tracking_uri("http://mlflow:8083")
 
+
 model_name = "best_model"
-model_prod_uri = "models:/{model_name}/production".format(model_name=model_name)
-model = mlflow.pyfunc.load_model(model_uri=model_prod_uri)
+model_version = 1
+model = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}/{model_version}")
 
 
 # Initialize FastAPI
@@ -33,18 +33,26 @@ async def predict_cover_type(data: CoverType):
     prediction = model.predict(
         [
             [
-                data.Elevation,
-                data.Aspect,
-                data.Slope,
-                data.Horizontal_Distance_To_Hydrology,
-                data.Vertical_Distance_To_Hydrology,
-                data.Horizontal_Distance_To_Roadways,
-                data.Hillshade_9am,
-                data.Hillshade_Noon,
-                data.Hillshade_3pm,
-                data.Horizontal_Distance_To_Fire_Points,
-                data.Wilderness_Area,
-                data.Soil_Type
+                data.race,
+                data.gender,
+                data.age,
+                data.admission_type_id,
+                data.discharge_disposition_id,
+                data.admission_source_id,
+                data.time_in_hospital,
+                data.medical_specialty,
+                data.num_lab_procedures,
+                data.num_procedures,
+                data.num_medications,
+                data.number_emergency,
+                data.number_inpatient,
+                data.diag_1,
+                data.diag_2,
+                data.diag_3,
+                data.number_diagnoses,
+                data.insulin,
+                data.change,
+                data.diabetesMed,
             ]
         ]
     )

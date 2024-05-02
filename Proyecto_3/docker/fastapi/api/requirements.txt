@@ -5,3 +5,4 @@ mlflow
 catboost
 boto3
 awscli
+scikit-learn==1.2.2

@@ -154,7 +154,8 @@ def pipeline():
             "metformin-rosiglitazone",
             "metformin-pioglitazone",
             "max_glu_serum",
-            "A1Cresult"
+            "A1Cresult",
+            "batch"
         ]
 
         # Eliminar las columnas especificadas
@@ -217,6 +218,3 @@ def pipeline():
     prev_task >> clean_task >> train_task   
 
 dag_instance = pipeline()
-
-
-
