@@ -59,6 +59,36 @@ services:
       start_period: 5s
     restart: always
 
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Base_de_Datos
+      MYSQL_USER: ab
+      MYSQL_PASSWORD: ab
+    ports:
+      - "8082:3306"
+    volumes:
+      - mysql-data-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+
+  admin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: root  
+
   mlflow:
     build: ./docker/mlflow
     container_name: mlflow
@@ -276,4 +306,6 @@ services:
         condition: service_completed_successfully
 volumes:
   postgres-db-volume:
+  mysql-data-volume:
+
 
