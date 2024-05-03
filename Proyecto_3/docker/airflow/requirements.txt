@@ -1,7 +1,6 @@
 mlflow
 pycaret
 scikit-learn==1.2.2
-xgboost
 scipy
 boto3
 requests

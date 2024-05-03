@@ -7,5 +7,4 @@ requests
 pymysql
 mysqlclient
 apache-airflow
-catboost
 mysql-connector-python

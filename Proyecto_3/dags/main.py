@@ -16,7 +16,6 @@ from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from airflow.decorators import dag , task 
 from sklearn.model_selection import train_test_split
-from catboost import CatBoostClassifier
 from sqlalchemy import create_engine , inspect
 from airflow.sensors.time_delta import TimeDeltaSensor
 from airflow.operators.dummy import DummyOperator
@@ -45,11 +44,12 @@ def pipeline():
             time.sleep(6)
 
         if index == 0 :
-            url = "http://10.43.101.152:8084/restart_data_generation"  
+            #url = "http://10.43.101.152:8084/restart_data_generation"  
+            url = "http://host.docker.internal:8084/restart_data_generation"
             response = requests.get(url)
             
-        #response = requests.get("http://localhost:80/data_train")
-        response = requests.get("http://10.43.101.152:8084/data_train")
+        #response = requests.get("http://10.43.101.152:8084/data_train")
+        response = requests.get("http://host.docker.internal:8084/data_train")
         data = response.json()
 
         df = pd.DataFrame(

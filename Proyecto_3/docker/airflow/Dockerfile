@@ -23,7 +23,6 @@ RUN pip install --upgrade pip
 RUN pip install mlflow==2.3.0
 RUN pip install pycaret==3.0.0
 RUN pip install scikit-learn==1.2.2
-RUN pip install xgboost==2.0.3
 RUN pip install scipy==1.11.4
 RUN pip install boto3==1.26.121
 RUN pip install requests==2.28.2
