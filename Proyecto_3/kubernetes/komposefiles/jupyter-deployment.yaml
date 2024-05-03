@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o komposefiles/ --volumes hostPath
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: jupyter
+  name: jupyter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: jupyter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o komposefiles/ --volumes hostPath
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/proyecto-3-default: "true"
+        io.kompose.service: jupyter
+    spec:
+      containers:
+        - env:
+            - name: AWS_ACCESS_KEY_ID
+              value: minioadmin
+            - name: AWS_SECRET_ACCESS_KEY
+              value: minioadmin
+            - name: JUPYTER_TOKEN
+              value: token
+            - name: MLFLOW_S3_ENDPOINT_URL
+              value: http://minio:9000
+          image: thonybossa/proyeto3_mlops:jupyter
+          name: jupyter
+          ports:
+            - containerPort: 8086
+          resources: {}
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /jupyter_code
+              name: jupyter-hostpath0
+      restartPolicy: Always
+      volumes:
+        - hostPath:
+            path: /home/estudiante/MLOPS/Proyecto_3/docker/jupyter
+          name: jupyter-hostpath0
+status: {}

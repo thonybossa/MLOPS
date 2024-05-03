@@ -15,6 +15,9 @@ os.system('sudo docker volume rm $(sudo docker volume ls -q)')
 # Eliminar todas las redes
 os.system('sudo docker network rm $(sudo docker network ls -q)')
 
+#Eliminar img, cont, vol y redes sin utilizar
+os.system('sudo docker system prune -a')
+
 # Comprobar el estado de contenedores, imágenes, volúmenes y redes
 print('#### Docker Containers ####')
 os.system('sudo docker ps -a')

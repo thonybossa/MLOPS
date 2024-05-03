@@ -63,7 +63,7 @@ volumes:
 
 networks:
   network2:
-    name: proyecto_3_default
+    name: proyecto-3-default
     external: true
 
 
