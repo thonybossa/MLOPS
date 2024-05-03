@@ -59,6 +59,59 @@ services:
       start_period: 5s
     restart: always
 
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Base_de_Datos
+      MYSQL_USER: ab
+      MYSQL_PASSWORD: ab
+    ports:
+      - "8082:3306"
+    volumes:
+      - mysql-data-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+
+  admin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: root
+
+  minio:
+    container_name: Minio
+    command: server /data --console-address ":8089"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    image: quay.io/minio/minio:latest
+    ports:
+      - '8088:8088'
+      - '8089:8089'
+    volumes:
+      - ./minio_data:/data
+    restart: unless-stopped
+
+  fastapi:
+    build: ./docker/fastapi
+    container_name: fastapi
+    ports:
+      - '8085:8085'
+    volumes:
+      - ./docker/fastapi/api/main.py:/main.py
+    restart: always
+
   mlflow:
     build: ./docker/mlflow
     container_name: mlflow
@@ -70,6 +123,7 @@ services:
     ports:
       - "8083:8083"
     depends_on:
+      - minio
       - mysql
     restart: always
     volumes:
@@ -79,6 +133,29 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  jupyter:
+    build: ./docker/jupyter
+    container_name: jupyter
+    environment:
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+      JUPYTER_TOKEN: "token"
+    ports:
+      - "8086:8086"
+    restart: always
+    volumes:
+    - ./docker/jupyter:/jupyter_code
+    stdin_open: true
+    tty: true
+
+  streamlit:
+    build: ./docker/streamlit
+    container_name: streamlit
+    ports:
+      - "8087:8087"
+    restart: always
 
   redis:
     image: redis:latest
@@ -276,4 +353,6 @@ services:
         condition: service_completed_successfully
 volumes:
   postgres-db-volume:
+  mysql-data-volume:
+  minio_data:
 
