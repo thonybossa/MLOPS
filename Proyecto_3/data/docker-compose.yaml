@@ -5,7 +5,7 @@ services:
     build: .
     container_name: fastapi_data_app
     ports:
-      - "80:80"
+      - "8084:8084"
     volumes:
       - ./Diabetes:/Diabetes
       - ./main/read_data_api.py:/read_data_api.py

@@ -45,11 +45,11 @@ def pipeline():
             time.sleep(6)
 
         if index == 0 :
-            url = "http://host.docker.internal:80/restart_data_generation"  
+            url = "http://10.43.101.152:8084/restart_data_generation"  
             response = requests.get(url)
             
         #response = requests.get("http://localhost:80/data_train")
-        response = requests.get("http://host.docker.internal:80/data_train")
+        response = requests.get("http://10.43.101.152:8084/data_train")
         data = response.json()
 
         df = pd.DataFrame(
