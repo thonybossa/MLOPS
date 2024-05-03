@@ -10,8 +10,10 @@ services:
       - MINIO_ROOT_PASSWORD=minioadmin
     image: quay.io/minio/minio:latest
     ports:
-      - '8088:8088'
+      #- '8088:8088'
       - '8089:8089'
+    expose:
+      - 8088
     volumes:
       - ./minio_data:/data
     restart: unless-stopped
@@ -41,7 +43,7 @@ services:
       - "8086:8086"
     restart: always
     volumes:
-    - ./docker/jupyter:/jupyter_code
+    - ../docker/jupyter:/jupyter_code
     stdin_open: true
     tty: true
     networks:
@@ -57,8 +59,6 @@ services:
       - network2
 
 volumes:
-  postgres-db-volume:
-  mysql-data-volume:
   minio_data:
 
 networks:

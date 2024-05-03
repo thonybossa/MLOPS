@@ -89,20 +89,6 @@ services:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: root
 
-  minio:
-    container_name: Minio
-    command: server /data --console-address ":8089"
-    environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
-    image: quay.io/minio/minio:latest
-    ports:
-      - '8088:8088'
-      - '8089:8089'
-    volumes:
-      - ./minio_data:/data
-    restart: unless-stopped
-
   mlflow:
     build: ./docker/mlflow
     container_name: mlflow
@@ -114,7 +100,7 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      - minio
+      #- minio
       - mysql
     restart: always
     volumes:
@@ -124,22 +110,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
-  jupyter:
-    build: ./docker/jupyter
-    container_name: jupyter
-    environment:
-      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
-      AWS_ACCESS_KEY_ID: minioadmin
-      AWS_SECRET_ACCESS_KEY: minioadmin
-      JUPYTER_TOKEN: "token"
-    ports:
-      - "8086:8086"
-    restart: always
-    volumes:
-    - ./docker/jupyter:/jupyter_code
-    stdin_open: true
-    tty: true
 
   redis:
     image: redis:latest
@@ -337,5 +307,5 @@ services:
 volumes:
   postgres-db-volume:
   mysql-data-volume:
-  minio_data:
+  #minio_data:
 
