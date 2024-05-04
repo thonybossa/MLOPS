@@ -6,10 +6,10 @@ import os
 import mlflow
 
 # Load model
-os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://minio:9000"
+os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://10.43.101.152:8088"
 os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin'
-mlflow.set_tracking_uri("http://mlflow:8083")
+mlflow.set_tracking_uri("http://10.43.101.152:8083")
 
 model_name = "best_model"
 model_version = 1
