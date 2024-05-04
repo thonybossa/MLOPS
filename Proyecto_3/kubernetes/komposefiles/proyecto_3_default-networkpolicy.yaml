@@ -2,13 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   creationTimestamp: null
-  name: proyecto-3-default
+  name: proyecto_3_default
 spec:
   ingress:
     - from:
         - podSelector:
             matchLabels:
-              io.kompose.network/proyecto-3-default: "true"
+              io.kompose.network/proyecto_3_default: "true"
   podSelector:
     matchLabels:
-      io.kompose.network/proyecto-3-default: "true"
+      io.kompose.network/proyecto_3_default: "true"
