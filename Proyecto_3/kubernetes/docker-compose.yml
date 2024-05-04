@@ -21,7 +21,7 @@ services:
       - network2
 
   fastapi:
-    image: thonybossa/proyeto3_mlops:fastapi
+    image: thonybossa/proyecto3_mlops:fastapi
     container_name: fastapi
     ports:
       - '8085:8085'
@@ -32,7 +32,7 @@ services:
       - network2
 
   jupyter:
-    image: thonybossa/proyeto3_mlops:jupyter
+    image: thonybossa/proyecto3_mlops:jupyter
     container_name: jupyter
     environment:
       MLFLOW_S3_ENDPOINT_URL: http://10.43.101.152:8088
@@ -50,7 +50,7 @@ services:
       - network2
 
   streamlit:
-    image: thonybossa/proyeto3_mlops:streamlit
+    image: thonybossa/proyecto3_mlops:streamlit
     container_name: streamlit
     ports:
       - "8087:8087"
