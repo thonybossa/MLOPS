@@ -15,9 +15,9 @@ def main():
     # Configure the Streamlit page layout
     st.set_page_config(layout="wide")
 
-    st.title(':computer: Proyecto 2 MLOPS: Grupo 3 :computer:')
+    st.title(':computer: Proyecto 3 MLOPS: Grupo 3 :computer:')
     st.subheader(
-        "En este dashboard, encontrará toda la información relacionada con el proyecto 2 de la materia MLOPS"
+        "En este dashboard, encontrará toda la información relacionada con el proyecto 3 de la materia MLOPS"
     )
     st.sidebar.title("Integrantes")
     st.sidebar.write(
@@ -41,36 +41,53 @@ def main():
     cols = st.columns(4)
 
 
+
     # Define los campos de entrada
-    elevation = cols[0].number_input("Elevation",value=3154)
-    aspect = cols[1].number_input("Aspect", value=351)
-    slope = cols[2].number_input("Slope", value=13)
-    horizontal_distance_to_hydrology = cols[3].number_input("Horizontal Distance To Hydrology", value=150)
-    vertical_distance_to_hydrology = cols[0].number_input("Vertical Distance To Hydrology", value=31)
-    horizontal_distance_to_roadways = cols[1].number_input("Horizontal Distance To Roadways", value=2023)
-    hillshade_9am = cols[2].number_input("Hillshade 9am", value=196)
-    hillshade_noon = cols[3].number_input("Hillshade Noon", value=217)
-    hillshade_3pm = cols[0].number_input("Hillshade 3pm", value=159)
-    horizontal_distance_to_fire_points = cols[1].number_input("Horizontal Distance To Fire Points", value=1828)
-    wilderness_area = cols[2].text_input("Wilderness Area", value='Rawah')  
-    soil_type = cols[3].text_input("Soil Type", value='C7745')  
+    race = cols[0].text_input("Race", value="AfricanAmerican")
+    gender = cols[1].text_input("Gender", value="Female")
+    age = cols[2].text_input("Age", value="[60-70)")
+    admission_type_id = cols[3].text_input("Admission Type ID", value="1")
+    discharge_disposition_id = cols[0].text_input("Discharge Disposition ID", value="3")
+    admission_source_id = cols[1].text_input("Admission Source ID", value="5")
+    time_in_hospital = cols[2].text_input("Time in Hospital", value="7")
+    medical_specialty = cols[3].text_input("Medical Specialty", value="Nephrology")
+    num_lab_procedures = cols[0].text_input("Number of Lab Procedures", value="47")
+    num_procedures = cols[1].text_input("Number of Procedures", value="2")
+    num_medications = cols[2].text_input("Number of Medications", value="29")
+    number_emergency = cols[3].text_input("Number of Emergency Visits", value="0")
+    number_inpatient = cols[0].text_input("Number of Inpatient Visits", value="1")
+    diag_1 = cols[1].text_input("Primary Diagnosis", value="38")
+    diag_2 = cols[2].text_input("Secondary Diagnosis", value="263")
+    diag_3 = cols[3].text_input("Additional Diagnosis", value="403")
+    number_diagnoses = cols[0].text_input("Number of Diagnoses", value="9")
+    insulin = cols[1].text_input("Insulin", value="Steady")
+    change = cols[2].text_input("Change", value="Ch")
+    diabetesMed = cols[3].text_input("Diabetes Medication", value="Yes")
     
     # Crea un botón para realizar la predicción
     if st.button('Predict'):
         # Hace una solicitud de predicción a tu API de FastAPI
         data = {
-            "Elevation": elevation,
-            "Aspect": aspect,
-            "Slope": slope,
-            "Horizontal Distance To Hydrology": horizontal_distance_to_hydrology,
-            "Vertical Distance To Hydrology": vertical_distance_to_hydrology,
-            "Horizontal Distance To Roadways": horizontal_distance_to_roadways,
-            "Hillshade 9am": hillshade_9am,
-            "Hillshade Noon": hillshade_noon,
-            "Hillshade 3pm": hillshade_3pm,
-            "Horizontal Distance To Fire Points": horizontal_distance_to_fire_points,
-            "Wilderness Area": wilderness_area,
-            "Soil Type": soil_type,
+            "race": race,
+            "gender": gender,
+            "age": age,
+            "admission_type_id": admission_type_id,
+            "discharge_disposition_id": discharge_disposition_id,
+            "admission_source_id": admission_source_id,
+            "time_in_hospital": time_in_hospital,
+            "medical_specialty": medical_specialty,
+            "num_lab_procedures": num_lab_procedures,
+            "num_procedures": num_procedures,
+            "num_medications": num_medications,
+            "number_emergency": number_emergency,
+            "number_inpatient": number_inpatient,
+            "diag_1": diag_1,
+            "diag_2": diag_2,
+            "diag_3": diag_3,
+            "number_diagnoses": number_diagnoses,
+            "insulin": insulin,
+            "change": change,
+            "diabetesMed": diabetesMed
         }
         prediction = get_prediction(data)
         
