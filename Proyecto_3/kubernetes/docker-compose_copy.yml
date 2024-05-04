@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+
+  minio:
+    container_name: Minio
+    command: server /data --console-address ":8089" --address :8088
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    image: quay.io/minio/minio:latest
+    ports:
+      #- '8088:8088'
+      - '8089:8089'
+    expose:
+      - 8088
+    volumes:
+      - ./minio_data:/data
+    restart: unless-stopped
+    networks:
+      - network2
+
+  fastapi:
+    image: thonybossa/proyecto3_mlops:fastapi
+    container_name: fastapi
+    ports:
+      - '8085:8085'
+    #volumes:
+    #  - ./docker/fastapi/api/main.py:/main.py
+    restart: always
+    networks:
+      - network2
+
+  jupyter:
+    image: thonybossa/proyecto3_mlops:jupyter
+    container_name: jupyter
+    environment:
+      MLFLOW_S3_ENDPOINT_URL: http://10.43.101.152:8088
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+      JUPYTER_TOKEN: "token"
+    ports:
+      - "8086:8086"
+    restart: always
+    volumes:
+    - ../docker/jupyter:/jupyter_code
+    stdin_open: true
+    tty: true
+    networks:
+      - network2
+
+  streamlit:
+    image: thonybossa/proyecto3_mlops:streamlit
+    container_name: streamlit
+    ports:
+      - "8087:8087"
+    restart: always
+    networks:
+      - network2
+
+volumes:
+  minio_data:
+
+networks:
+  network2:
+    name: proyecto-3-default
+    external: true
+
+
