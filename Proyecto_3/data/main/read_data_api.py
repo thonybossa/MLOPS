@@ -33,7 +33,7 @@ with open("Diabetes/df_validation_data.csv", newline="") as csvfile:
     for row in reader:
         validation_data.append(row)
 
-batch_size = len(data) // 900
+batch_size = len(data) // 6
 
 def get_batch_data(batch_number: int, batch_size: int = batch_size):
     start_index = batch_number * batch_size

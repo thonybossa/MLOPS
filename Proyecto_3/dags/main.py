@@ -209,7 +209,7 @@ def pipeline():
     start = DummyOperator(task_id='start')
     prev_task = start
 
-    for i in range(1): # aca se cambia el parametro para el numero de batch
+    for i in range(6): # aca se cambia el parametro para el numero de batch
         load_task = load_data(i)
         prev_task = prev_task >> load_task
 
