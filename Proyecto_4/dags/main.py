@@ -32,7 +32,7 @@ os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin'
 
 mlflow.set_tracking_uri("http://mlflow:8083")
-mlflow.set_experiment('Diabetes')
+mlflow.set_experiment('House Price')
 mlflow.sklearn.autolog(log_model_signatures=True, log_input_examples=True, registered_model_name="best_model")
 
 @dag(start_date=datetime(2024, 3, 9), schedule_interval='@daily', catchup=False)
