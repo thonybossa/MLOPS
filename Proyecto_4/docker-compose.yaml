@@ -150,7 +150,8 @@ services:
       - "8086:8086"
     restart: always
     volumes:
-    - ./docker/jupyter:/jupyter_code
+    #- ./docker/jupyter:/jupyter_code
+    - ./docker/jupyter:/work
     stdin_open: true
     tty: true
 
