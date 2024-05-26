@@ -1,0 +1,123 @@
+name: Build and Push Docker Image to Docker Hub
+
+on: push
+jobs:
+  airflow:
+    name: airflow Docker Image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+
+      # Cheking Repo
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      # Login Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.USERNAME_DOKERHUB}}
+          password: ${{secrets.TOKEN_DOCKERHUB}}
+      
+      # Build and push to Ducker Hub
+      - name: Build and push airflow Image
+        uses: docker/build-push-action@v4
+        with:
+          context: Proyecto_4/docker/airflow
+          push: true
+          tags: thonybossa/proyecto4_mlops:airflow
+
+  fastapi:
+    name: fastapi Docker Image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+
+      # Cheking Repo
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      # Login Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.USERNAME_DOKERHUB}}
+          password: ${{secrets.TOKEN_DOCKERHUB}}
+      
+      # Build and push to Ducker Hub
+      - name: Build and push fastapi Image
+        uses: docker/build-push-action@v4
+        with:
+          context: Proyecto_4/docker/fastapi
+          push: true
+          tags: thonybossa/proyecto4_mlops:fastapi
+
+  jupyter:
+    name: jupyter Docker Image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+
+      # Cheking Repo
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      # Login Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.USERNAME_DOKERHUB}}
+          password: ${{secrets.TOKEN_DOCKERHUB}}
+      
+      # Build and push to Ducker Hub
+      - name: Build and push jupyter Image
+        uses: docker/build-push-action@v4
+        with:
+          context: Proyecto_4/docker/jupyter
+          push: true
+          tags: thonybossa/proyecto4_mlops:jupyter
+
+  mlflow:
+    name: mlflow Docker Image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+
+      # Cheking Repo
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      # Login Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.USERNAME_DOKERHUB}}
+          password: ${{secrets.TOKEN_DOCKERHUB}}
+      
+      # Build and push to Ducker Hub
+      - name: Build and push mlflow Image
+        uses: docker/build-push-action@v4
+        with:
+          context: Proyecto_4/docker/mlflow
+          push: true
+          tags: thonybossa/proyecto4_mlops:mlflow
+
+  streamlit:
+    name: streamlit Docker Image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+
+      # Cheking Repo
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      # Login Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.USERNAME_DOKERHUB}}
+          password: ${{secrets.TOKEN_DOCKERHUB}}
+      
+      # Build and push to Ducker Hub
+      - name: Build and push streamlit Image
+        uses: docker/build-push-action@v4
+        with:
+          context: Proyecto_4/docker/streamlit
+          push: true
+          tags: thonybossa/proyecto4_mlops:streamlit
