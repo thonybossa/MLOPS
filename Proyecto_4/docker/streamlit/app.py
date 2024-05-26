@@ -16,7 +16,7 @@ def main():
     # Configure the Streamlit page layout
     st.set_page_config(layout="wide")
 
-    st.title(':computer: Proyecto 3 MLOPS: Grupo 3 :computer:')
+    st.title(':computer: Proyecto 4 MLOPS: Grupo 3 :computer:')
     st.subheader(
         "En este dashboard, encontrará toda la información relacionada con el proyecto 4 de la materia MLOPS"
     )
