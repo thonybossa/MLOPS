@@ -23,7 +23,7 @@ from sklearn.metrics import confusion_matrix
 from airflow.models import Variable
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
 
 # Config
 os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://10.43.101.152:8088"
@@ -44,135 +44,75 @@ def pipeline():
             time.sleep(6)
 
         if index == 0 :
-            url = "http://10.43.101.152:8084/restart_data_generation"  
+            url = "http://10.43.101.149/restart_data_generation?group_number=3"  
             #url = "http://host.docker.internal:8084/restart_data_generation"
             response = requests.get(url)
             
-        response = requests.get("http://10.43.101.152:8084/data_train")
+        response = requests.get("http://10.43.101.149/data?group_number=3")
         #response = requests.get("http://host.docker.internal:8084/data_train")
         data = response.json()
 
         df = pd.DataFrame(
-            columns = [
-                "encounter_id",
-                "patient_nbr",
-                "race",
-                "gender",
-                "age",
-                "weight",
-                "admission_type_id",
-                "discharge_disposition_id",
-                "admission_source_id",
-                "time_in_hospital",
-                "payer_code",
-                "medical_specialty",
-                "num_lab_procedures",
-                "num_procedures",
-                "num_medications",
-                "number_outpatient",
-                "number_emergency",
-                "number_inpatient",
-                "diag_1",
-                "diag_2",
-                "diag_3",
-                "number_diagnoses",
-                "max_glu_serum",
-                "A1Cresult",
-                "metformin",
-                "repaglinide",
-                "nateglinide",
-                "chlorpropamide",
-                "glimepiride",
-                "acetohexamide",
-                "glipizide",
-                "glyburide",
-                "tolbutamide",
-                "pioglitazone",
-                "rosiglitazone",
-                "acarbose",
-                "miglitol",
-                "troglitazone",
-                "tolazamide",
-                "examide",
-                "citoglipton",
-                "insulin",
-                "glyburide-metformin",
-                "glipizide-metformin",
-                "glimepiride-pioglitazone",
-                "metformin-rosiglitazone",
-                "metformin-pioglitazone",
-                "change",
-                "diabetesMed",
-                "readmitted"
+            [
+                'brokered_by',
+                'status',
+                'price',
+                'bed',
+                'bath',
+                'acre_lot',
+                'street',
+                'city',
+                'state',
+                'zip_code',
+                'house_size',
+                'pre_sold_state'
             ]
-            )
-        for i in range(len(data['data'])):
-            df.loc[i] = data['data'][i]
+        )
         
+        df = pd.DataFrame.from_dict(data['data']).reset_index(drop=True)
         df['batch'] = data['batch_number']
+        
         engine = create_engine('mysql+mysqlconnector://ab:ab@mysql/Base_de_Datos')
         inspector = inspect(engine)
-        if inspector.has_table('raw_data_diabetes'):
-            df.to_sql('raw_data_diabetes', engine, if_exists='append', index=False)
+
+        if inspector.has_table('raw_data_price'):
+            df.to_sql('raw_data_price', engine, if_exists='append', index=False)
         else:
-            df.to_sql('raw_data_diabetes', engine, if_exists='fail', index=False)
+            df.to_sql('raw_data_price', engine, if_exists='fail', index=False)
 
     @task
     def clean_data():
-        engine = create_engine('mysql+mysqlconnector://ab:ab@mysql/Base_de_Datos')
-        # Leer los datos desde la base de datos
-        df = pd.read_sql('SELECT * FROM raw_data_diabetes', engine)
+        engine = create_engine('mysql+mysqlconnector://ab:ab@mysql/Base_de_Datos', pool_pre_ping=True)
+        df = pd.read_sql('SELECT * FROM raw_data_price', engine)
+
         df = df.dropna()
+        df.replace("", np.nan, inplace=True)
+        df.replace("?", np.nan, inplace=True)
 
         # Lista de columnas a eliminar
         columns_to_drop = [
-            "encounter_id",
-            "patient_nbr",
-            "weight",
-            "payer_code",
-            "number_outpatient",
-            "metformin",
-            "repaglinide",
-            "nateglinide",
-            "chlorpropamide",
-            "glimepiride",
-            "acetohexamide",
-            "glipizide",
-            "glyburide",
-            "tolbutamide",
-            "pioglitazone",
-            "rosiglitazone",
-            "acarbose",
-            "miglitol",
-            "troglitazone",
-            "tolazamide",
-            "examide",
-            "citoglipton",
-            "glyburide-metformin",
-            "glipizide-metformin",
-            "glimepiride-pioglitazone",
-            "metformin-rosiglitazone",
-            "metformin-pioglitazone",
-            "max_glu_serum",
-            "A1Cresult",
-            "batch"
+            'batch',
+            'brokered_by',
+            'prev_sold_date',
+            'zip_code',
+            'street',
+            'city'
         ]
 
         # Eliminar las columnas especificadas
         df_cleaned = df.drop(columns=columns_to_drop, errors='ignore')
 
-        # Guardar el DataFrame limpio en una nueva tabla
-        df_cleaned.to_sql('clean_data_diabetes', engine, if_exists='replace', index=False)
+        df_cleaned.to_sql('clean_data_price', engine, if_exists='replace', index=False, chunksize=1000)
 
        
     @task
     def train():
         engine = create_engine('mysql+mysqlconnector://ab:ab@mysql/Base_de_Datos')
-        df = pd.read_sql('SELECT * FROM clean_data_diabetes', engine)
+        df = pd.read_sql('SELECT * FROM clean_data_price', engine)
 
         # Preparar datos
-        X = df.drop(columns=['readmitted'])
-        y = df['readmitted'].map({'NO': 0, '>30': 1, '<30': 2})
+        X = df.drop(columns=['price'])
+        y = df['price']
 
         categorical_features = X.select_dtypes(include=['object']).columns.tolist()
         # Preparar el ColumnTransformer
@@ -181,11 +121,14 @@ def pipeline():
             remainder='passthrough')
         
         # Crear el pipeline
-        pipe = Pipeline(steps=[
-            ("column_trans", column_trans),
-            ("scaler", StandardScaler(with_mean=False)),
-            ("classifier", RandomForestClassifier())
-        ])
+        pipe = Pipeline(
+            steps = 
+            [
+                ("column_trans", column_trans),
+                ("scaler", StandardScaler(with_mean=False)),
+                ("classifier", RandomForestRegressor())
+            ]
+        )
  
         # Parámetros para GridSearchCV
         param_grid = {
@@ -209,7 +152,7 @@ def pipeline():
     start = DummyOperator(task_id='start')
     prev_task = start
 
-    for i in range(6): # aca se cambia el parametro para el numero de batch
+    for i in range(1): # aca se cambia el parametro para el numero de batch
         load_task = load_data(i)
         prev_task = prev_task >> load_task
 
