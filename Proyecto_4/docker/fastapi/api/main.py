@@ -6,8 +6,8 @@ import os
 import mlflow
 
 # Load model
-os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://10.43.101.152:8088"
-#os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://minio:9000"
+#os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://10.43.101.152:8088"
+os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://minio:9000"
 os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin'
 

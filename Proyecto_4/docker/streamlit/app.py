@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 
 # Define la URL de tu servidor FastAPI
-FASTAPI_URL = 'http://10.43.101.152:8085'
-#FASTAPI_URL = 'http://fastapi:8085'
+#FASTAPI_URL = 'http://10.43.101.152:8085'
+FASTAPI_URL = 'http://fastapi:8085'
 
 # Define una función para hacer una solicitud de predicción a tu API de FastAPI
 def get_prediction(data):
