@@ -5,8 +5,9 @@ x-airflow-common:
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.0}
-  build:
-    context: ./docker/airflow
+  #build:
+    #context: ./docker/airflow
+  image: thonybossa/proyecto4_mlops:airflow
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
@@ -90,7 +91,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
 
   fastapi:
-    build: ./docker/fastapi
+    #build: ./docker/fastapi
+    image: thonybossa/proyecto4_mlops:fastapi
     container_name: fastapi
     ports:
       - '8085:8085'
@@ -99,7 +101,8 @@ services:
     restart: always
 
   mlflow:
-    build: ./docker/mlflow
+    #build: ./docker/mlflow
+    image: thonybossa/proyecto4_mlops:mlflow
     container_name: mlflow
     environment:
       MLFLOW_S3_ENDPOINT_URL: http://10.43.101.152:8088
@@ -120,7 +123,8 @@ services:
       retries: 3
 
   jupyter:
-    build: ./docker/jupyter
+    #build: ./docker/jupyter
+    image: thonybossa/proyecto4_mlops:jupyter
     container_name: jupyter
     environment:
       MLFLOW_S3_ENDPOINT_URL: http://10.43.101.152:8088
@@ -136,7 +140,8 @@ services:
     tty: true
 
   streamlit:
-    build: ./docker/streamlit
+    #build: ./docker/streamlit
+    image: thonybossa/proyecto4_mlops:streamlit
     container_name: streamlit
     ports:
       - "8087:8087"
@@ -339,4 +344,3 @@ services:
 volumes:
   postgres-db-volume:
   mysql-data-volume:
-
