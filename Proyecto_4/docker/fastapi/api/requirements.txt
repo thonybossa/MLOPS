@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pandas
+mlflow
+boto3
+awscli
+scikit-learn==1.2.2
+sqlalchemy
+mysql-connector-python

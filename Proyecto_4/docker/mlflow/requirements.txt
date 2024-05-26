@@ -1,0 +1,6 @@
+mlflow
+awscli
+boto3
+pymysql
+mysqlclient
+scikit-learn==1.2.2
