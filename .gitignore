@@ -5,6 +5,8 @@ __pycache__/
 Proyecto_1/data/
 # C extensions
 *.so
+*.Trash-0
+mlruns/
 
 Proyecto_3/logs
 Proyecto_3/minio_data/proyecto-3/

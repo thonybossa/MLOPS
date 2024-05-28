@@ -24,6 +24,9 @@ from airflow.models import Variable
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.compose import ColumnTransformer
+from sklearn.decomposition import TruncatedSVD
+from airflow.operators.python import PythonOperator, BranchPythonOperator
 
 # Config
 #os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://10.43.101.152:8088"
@@ -37,6 +40,40 @@ mlflow.sklearn.autolog(log_model_signatures=True, log_input_examples=True, regis
 
 @dag(start_date=datetime(2024, 3, 9), schedule_interval='@daily', catchup=False)
 def pipeline():
+
+    @task
+    def load_historical_data():
+        engine = create_engine('mysql+mysqlconnector://ab:ab@mysql/Base_de_Datos')
+        df = pd.read_sql('SELECT * FROM clean_data_price', engine)
+        return df
+    
+    @task
+    def perform_pca_and_compare(historical_data, new_data):
+        categorical_features = historical_data.select_dtypes(include=['object']).columns.tolist()
+        column_transformer = ColumnTransformer(
+            [("encoder", OneHotEncoder(handle_unknown='ignore'), categorical_features)],
+            remainder='passthrough'
+        )
+
+            # PCA Pipeline
+        pca_pipeline = Pipeline([
+            ("transform", column_transformer),
+            ("scaler", StandardScaler(with_mean=False)),
+            ("SVD", TruncatedSVD(n_components=2))
+        ])
+
+            # Process both datasets
+        historical_processed = pca_pipeline.fit_transform(historical_data)
+        new_processed = pca_pipeline.transform(new_data)
+
+            # Compute distances between the principal components of each dataset
+        distance = np.linalg.norm(np.mean(historical_processed, axis=0) - np.mean(new_processed, axis=0))
+        return distance > 0.1  
+    
+    @task
+    def decision_task(ti):
+        pca_result = ti.xcom_pull(task_ids='perform_pca_and_compare', key='pca_result')
+        return 'clean_data' if pca_result else 'skip_training'
 
     
     @task
@@ -80,6 +117,7 @@ def pipeline():
             df.to_sql('raw_data_price', engine, if_exists='append', index=False)
         else:
             df.to_sql('raw_data_price', engine, if_exists='fail', index=False)
+        return df
 
     @task
     def clean_data():
@@ -149,16 +187,30 @@ def pipeline():
             search.fit(X_train, y_train)
             print("Mejores parámetros:", search.best_params_)
             print("Mejor puntuación:", search.best_score_)
+    @task
+    def skip_training():
+        print("NO se entrena el modelo")
+
 
     start = DummyOperator(task_id='start')
-    prev_task = start
+    load_historical = load_historical_data()
+    for i in range(1): # se cambia el parametro para el numero de batch
+        load_new = load_data(i)
+        pca_result = perform_pca_and_compare(load_historical, load_new)
+        decision_task = BranchPythonOperator(
+            task_id='decision_task',
+            python_callable=lambda pca_result: 'clean_data' if pca_result else 'skip_training',
+            provide_context=True,
+            op_args=[pca_result],
+        )   
+        
 
-    for i in range(1): # aca se cambia el parametro para el numero de batch
-        load_task = load_data(i)
-        prev_task = prev_task >> load_task
+        clean = clean_data()
+        train = train()
+        skip_training = DummyOperator(task_id='skip_training')
 
-    clean_task = clean_data()
-    train_task = train()
-    prev_task >> clean_task >> train_task   
+        load_historical >> load_new >> pca_result >> decision_task
+        decision_task >> clean >> train
+        decision_task >> skip_training
 
 dag_instance = pipeline()
