@@ -209,7 +209,7 @@ def pipeline():
         train = train()
         skip_training = DummyOperator(task_id='skip_training')
 
-        load_historical >> load_new >> pca_result >> decision_task
+        load_new >> load_historical >> pca_result >> decision_task
         decision_task >> clean >> train
         decision_task >> skip_training
 
