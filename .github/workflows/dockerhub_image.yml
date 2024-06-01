@@ -24,7 +24,7 @@ jobs:
         with:
           context: Proyecto_4/docker/airflow
           push: true
-          tags: thonybossa/proyecto4_mlops:airflow
+          tags: josevega06/proyecto4_mlops:airflow
 
   fastapi:
     name: fastapi Docker Image to Docker Hub
@@ -48,7 +48,7 @@ jobs:
         with:
           context: Proyecto_4/docker/fastapi
           push: true
-          tags: thonybossa/proyecto4_mlops:fastapi
+          tags: josevega06/proyecto4_mlops:fastapi
 
   jupyter:
     name: jupyter Docker Image to Docker Hub
@@ -72,7 +72,7 @@ jobs:
         with:
           context: Proyecto_4/docker/jupyter
           push: true
-          tags: thonybossa/proyecto4_mlops:jupyter
+          tags: josevega06/proyecto4_mlops:jupyter
 
   mlflow:
     name: mlflow Docker Image to Docker Hub
@@ -96,7 +96,7 @@ jobs:
         with:
           context: Proyecto_4/docker/mlflow
           push: true
-          tags: thonybossa/proyecto4_mlops:mlflow
+          tags: josevega06/proyecto4_mlops:mlflow
 
   streamlit:
     name: streamlit Docker Image to Docker Hub
@@ -120,4 +120,4 @@ jobs:
         with:
           context: Proyecto_4/docker/streamlit
           push: true
-          tags: thonybossa/proyecto4_mlops:streamlit
+          tags: josevega06/proyecto4_mlops:streamlit
