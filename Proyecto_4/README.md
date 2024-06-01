@@ -7,6 +7,8 @@ Integrantes:
 * José Luis Vega
 * Víctor Andrés De La Hoz
 
+*Link del video de la presentacion: `https://youtu.be/s-72o9u9JTY`
+
 ## Puertos para acceder a los servicios en máquina virtual:
 Este proyecto se encuentra desplegado en las siguientes direcciones:
 * Streamlit: `http://10.43.101.152:8087`
@@ -26,8 +28,6 @@ Este proyecto se encuentra desplegado en las siguientes direcciones:
 * MySQL: `http://10.43.101.152:8082` (se puede visualizar desde Admin)
 * Dockerhub: `https://hub.docker.com/repository/docker/josevega06/proyecto4_mlops/tags`
 
-
-*Link del video de la presentacion: `https://youtu.be/s-72o9u9JTY`
 
 ## Instrucciones para construcción local de la solución:
 A continuación encontrará las instrucciones para replicar este desarrollo.
