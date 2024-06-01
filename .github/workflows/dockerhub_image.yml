@@ -120,4 +120,4 @@ jobs:
         with:
           context: Proyecto_4/docker/streamlit
           push: true
-          tags: thonybossa/proyecto4_mlops:streamlit
+          tags: josevega06/proyecto4_mlops:streamlit
