@@ -44,11 +44,16 @@ def pipeline():
     @task
     def load_historical_data():
         engine = create_engine('mysql+mysqlconnector://ab:ab@mysql/Base_de_Datos')
-        df = pd.read_sql('SELECT * FROM clean_data_price', engine)
+        try:
+            df = pd.read_sql('SELECT * FROM clean_data_price', engine)
+        except:
+            df = pd.DataFrame()
         return df
     
     @task
     def perform_pca_and_compare(historical_data, new_data):
+        if historical_data.empty:
+            return True
         categorical_features = historical_data.select_dtypes(include=['object']).columns.tolist()
         column_transformer = ColumnTransformer(
             [("encoder", OneHotEncoder(handle_unknown='ignore'), categorical_features)],
@@ -209,7 +214,7 @@ def pipeline():
         train = train()
         skip_training = DummyOperator(task_id='skip_training')
 
-        load_new >> load_historical >> pca_result >> decision_task
+        load_historical >> load_new >> pca_result >> decision_task
         decision_task >> clean >> train
         decision_task >> skip_training
 
