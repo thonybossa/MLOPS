@@ -40,7 +40,7 @@ A continuación encontrará las instrucciones para replicar este desarrollo.
 
     `cd MLOPS/Proyecto_4/data`
 4. Despues ubiquese en el siguiente directorio
-    `cd MLOPS/Proyecto_3` <br>
+    `cd MLOPS/Proyecto_4` <br>
    y ejecute el siguiente comando para levantar los servicios disponibles en el docker-compose
    ```bash
     docker-compose up
